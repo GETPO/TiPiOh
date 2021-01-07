@@ -1,8 +1,5 @@
 package com.TiPiOh_Server.TiPiOh_Server.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class UserProfile {
     private String id;
     private String name;
