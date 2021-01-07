@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-*.json
+/Users/injechoi/Documents/TiPiOh_A/TiPiOh_Server/src/main/resources/tipioh-5eba5-firebase-adminsdk-v97pl-611b411ac6.json
 .gitignore
