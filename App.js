@@ -28,17 +28,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import HomeScreen from './src/Screen/HomeScreen';
+import HomeScreen from './src/Screen/HomeScreenPage/HomeScreen';
 import NotificationScreen from './src/Screen/NotificationScreen';
 import ProfileScreen from './src/Screen/ProfileScreen';
 import RankingScreen from './src/Screen/RankingScreen';
 import WriteScreen from './src/Screen/WriteScreen';
+import TopHeader from './src/etc/Header';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <>
+    <TopHeader />
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
