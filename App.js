@@ -30,7 +30,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './src/Screen/HomeScreenPage/HomeScreen';
 import NotificationScreen from './src/Screen/NotificationScreen';
-import ProfileScreen from './src/Screen/ProfileScreen';
+import ProfileScreen from './src/Screen/ProgileScreenPage/ProfileScreen';
 import RankingScreen from './src/Screen/RankingScreen';
 import WriteScreen from './src/Screen/WriteScreen';
 import TopHeader from './src/etc/Header';
