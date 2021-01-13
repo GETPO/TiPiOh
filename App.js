@@ -1,116 +1,89 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import { StatusBar } from 'expo-status-bar';
+import React, {Component} from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import * as firebase from 'firebase'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import LandingScreen from './components/auth/Landing'
+import RegisterScreen from './components/auth/Register'
+import LoginScreen from './components/auth/Login'
+import MainScreen from './components/Main'
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import rootReducer from './redux/reducers'
+import thunk from 'redux-thunk'
 
-import HomeScreen from './src/Screen/HomeScreenPage/HomeScreen';
-import NotificationScreen from './src/Screen/NotificationScreen';
-import ProfileScreen from './src/Screen/ProgileScreenPage/ProfileScreen';
-import RankingScreen from './src/Screen/RankingScreen';
-import WriteScreen from './src/Screen/WriteScreen';
-import TopHeader from './src/etc/Header';
+const Stack = createStackNavigator();
+const store = createStore(rootReducer,applyMiddleware(thunk))
+import fbconfig from './config/FirebaseConfig'
 
-const Tab = createBottomTabNavigator();
+const firebaseConfig = {
+  apiKey: fbconfig.apiKey,
+  authDomain: fbconfig.authDomain,
+  projectId: fbconfig.projectId,
+  storageBucket: fbconfig.storageBucket,
+  messagingSenderId: fbconfig.messagingSenderId,
+  appId: fbconfig.appId,
+  measurementId: fbconfig.measurementId
+};
 
-export default function App() {
-  return (
-    <>
-    <TopHeader />
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'Home') {
-              iconName = focused ? 'ios-file-tray' : 'ios-file-tray-outline';
-            } else if (route.name === 'Ranking') {
-              iconName = focused ? 'ios-hand-right' : 'ios-hand-right-outline';
-            } else if (route.name === 'Write') {
-              iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
-            } else if (route.name === 'Notification') {
-              iconName = focused ? 'ios-chatbubble' : 'ios-chatbubble-outline';
-            } else if (route.name === 'Profile') {
-              iconName = focused ? 'ios-happy' : 'ios-happy-outline';
-            }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Ranking" component={RankingScreen} />
-        <Tab.Screen name="Write" component={WriteScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-    </>
-  );
+if(firebase.apps.length === 0){
+  firebase.initializeApp(firebaseConfig)
+  // firebase.analytics();
 }
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+export class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      loaded: false, 
+    }
+  }
 
-// export default App;
+  componentDidMount(){
+    firebase.auth().onAuthStateChanged((user) => {
+      if(!user){
+        this.setState({
+          loggedIn: false,
+          loaded: true,
+        })
+      }else{
+        this.setState({
+          loggedIn: true,
+          loaded: true,
+        })
+      }
+    })
+  }
+
+  render() {
+    const {loggedIn, loaded} = this.state;
+    if(!loaded){
+      return(
+        <View style = {{flex: 1, justifyContent: 'center'}}>
+          <Text> Loading </Text>
+        </View>
+      )
+    }
+    if(!loggedIn){
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}}/>
+            <Stack.Screen name="Register" component={RegisterScreen}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+    return(
+      <Provider store={store}>
+        <MainScreen />
+      </Provider>
+    )
+  }
+}
+
+export default App
