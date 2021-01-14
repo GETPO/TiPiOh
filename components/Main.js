@@ -13,7 +13,6 @@ import NotificationScreen from './main/Notification'
 import ProfileScreen from './main/Profile'
 
 const EmptyScreen = () => {
-    console.log("@@")
     return(null)
 }
 const Tab = createBottomTabNavigator();
@@ -32,42 +31,41 @@ export class Main extends Component {
         }
         return (
             <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
-    
-                if (route.name === 'Feed') {
-                  iconName = focused ? 'ios-file-tray' : 'ios-file-tray-outline';
-                } else if (route.name === 'Ranking') {
-                  iconName = focused ? 'ios-hand-right' : 'ios-hand-right-outline';
-                } else if (route.name === 'Write') {
-                  iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
-                } else if (route.name === 'Notification') {
-                  iconName = focused ? 'ios-chatbubble' : 'ios-chatbubble-outline';
-                } else if (route.name === 'Profile') {
-                  iconName = focused ? 'ios-happy' : 'ios-happy-outline';
-                }
-    
-                // You can return any component that you like here!
-                return <Ionicons name={iconName} size={size} color={color} />;
-              },
-            })}>
+                initialRouteName = "Feed"
+                screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+        
+                    if (route.name === 'Feed') {
+                    iconName = focused ? 'ios-file-tray' : 'ios-file-tray-outline';
+                    } else if (route.name === 'Ranking') {
+                    iconName = focused ? 'ios-hand-right' : 'ios-hand-right-outline';
+                    } else if (route.name === 'Write') {
+                    iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
+                    } else if (route.name === 'Notification') {
+                    iconName = focused ? 'ios-chatbubble' : 'ios-chatbubble-outline';
+                    } else if (route.name === 'Profile') {
+                    iconName = focused ? 'ios-happy' : 'ios-happy-outline';
+                    }
+        
+                    // You can return any component that you like here!
+                    return <Ionicons name={iconName} size={size} color={color} />;
+                },
+                })}
+            >
             <Tab.Screen name="Feed" component={FeedScreen} />
             <Tab.Screen name="Ranking" component={RankingScreen} />
             <Tab.Screen name="Write" component={EmptyScreen}
                 listeners={({navigation}) => ({
                     tabPress: event =>{
                         event.preventDefault();
-                        navigation.navigate("Write")
+                        navigation.navigate("WriteFunc")
                     }
                 })} 
             />
             <Tab.Screen name="Notification" component={NotificationScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
           </Tab.Navigator>
-            // <Tab.Navigator>
-            //     <Tab.Screen name="Feed" component={FeedScreen} />
-            // </Tab.Navigator>
         )
     }
 }
