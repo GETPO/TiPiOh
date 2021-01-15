@@ -13,19 +13,19 @@ export default function Save(props) {
         const uri = props.route.params.image;
         // 이미지가 저장될 Firebase의 Storage 경로
         const childPath = `post/${firebase.auth().currentUser.uid}/${Math.random().toString(36)}`;
-        console.log(childPath);
+        //console.log(childPath);
         const response = await fetch(uri);
         const blob = await response.blob();
         const task = firebase.storage().ref().child(childPath).put(blob);
         // 업로드 한 이미지 크기가 어느 정도인지 확인하는 기능
         const taskProgress = snapshot => {
-            console.log(`transferred: ${snapshot.bytesTransferred}`)
+            //console.log(`transferred: ${snapshot.bytesTransferred}`)
         }
         // 업로드 한 이미지를 public하게 볼 수 있게 하는 기능
         const taskCompleted = () => {
             task.snapshot.ref.getDownloadURL().then((snapshot) => {
                 savePostData(snapshot);     // Storage 말고 firestore DB에 이미지 업로드 했다는 post 저장하기
-                console.log(snapshot)
+                //console.log(snapshot)
             })
         }
         const taskError = snapshot => {

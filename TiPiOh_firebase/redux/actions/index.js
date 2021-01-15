@@ -1,10 +1,10 @@
 import firebase from 'firebase';
-import { USER_STATE_CHANGE } from '../constants/index';
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE } from '../constants/index';
 
 export function fetchUser() {
     return((dispatch) => {
         firebase.firestore()                        // firestore에 접근하여
-        .collection("users")                         // 'users' 컬렉션에 접근하고
+        .collection("users")                        // 'users' 컬렉션에 접근하고
         .doc(firebase.auth().currentUser.uid)       // currentUser의 uid를 기반으로 정보를 확인
         .get()                                      // 확인한 것을 가지고 옴
         .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
@@ -14,6 +14,26 @@ export function fetchUser() {
             else {
                 console.log('Does Not Exist');
             }
+        })
+    })
+}
+
+export function fetchUserPosts() {
+    return((dispatch) => {
+        firebase.firestore()                        // firestore에 접근하여
+        .collection("posts")                        // 'posts' 컬렉션에 접근하고
+        .doc(firebase.auth().currentUser.uid)       // currentUser의 uid를 기반의 doc에서
+        .collection("userPosts")                    // userPosts 컬렉션에 접근
+        .orderBy("creation", "asc")                 // 생성된 날짜를 기반으로 오름차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
+        .get()                                      // 확인한 것을 가지고 옴
+        .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
+            let posts = snapshot.docs.map(doc => {  // map은 docs를 iterate(순차적으로 접근)해서 원하는 정보만 뽑아서 배열로 리턴한다.
+                const data = doc.data();
+                const id = doc.id;
+                return {id, ...data}
+            })
+            //console.log(posts)
+            dispatch({type: USER_POSTS_STATE_CHANGE, posts})
         })
     })
 }
