@@ -10,7 +10,7 @@ export default function Save(props) {
     const [caption, setCaption] = useState("")
     const uploadImage = async() => {
         const uri = props.route.params.image;
-        // 이미지가 저장될 firestore의 경로
+        // 이미지가 저장될 Firebase의 Storage 경로
         const childPath = `post/${firebase.auth().currentUser.uid}/${Math.random().toString(36)}`;
         console.log(childPath);
         const response = await fetch(uri);
