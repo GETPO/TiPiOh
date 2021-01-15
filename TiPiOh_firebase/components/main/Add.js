@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function App() {
+// navigation 메소드를 사용하가 위해 함수 인자로 navigation을 사용
+export default function Add({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -69,9 +70,12 @@ export default function App() {
               );
             }}>
         </Button>
+        {/* 사진 찍고 image state에 정보가 저장 */}
         <Button title="Take Picture" onPress={() => takePicture()}/>
         <Button title="Pick Image From Gallery" onPress={() => pickImage()}/>
-        {/* 갖고 있는 이미지가 있으면 불러온다 */}
+        {/* Save Component에서 props를 통해 image 접근이 가능해진다. */}
+        <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/>
+        {/* 갖고 있는 이미지가 있으면 불러온다. */}
         {image && <Image source={{uri: image}} style={{flex: 1}}/>}
     </View>
   );

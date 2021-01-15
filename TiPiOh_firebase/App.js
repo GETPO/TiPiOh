@@ -13,6 +13,7 @@ import rootReducer from './redux/reducers';
 import thunk from 'redux-thunk';
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
+import SaveScreen from './components/main/Save';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -86,8 +87,10 @@ export class App extends Component {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Main"> 
             <Stack.Screen name="Main" component={MainScreen} options={{headerShown: false}} />
-            {/* Main 화면에서 Add 버튼을 누르면 Main 화면 위에 stack으로 Add 창이 생김 */}
-            <Stack.Screen name="Add" component={AddScreen} />
+            {/* Main 화면에서 Add 버튼을 누르면 Main 화면 위에 stack으로 Add 창이 생김 
+                navigation을 props로 사용*/}
+            <Stack.Screen name="Add" component={AddScreen} navigation={this.props.navigation} />
+            <Stack.Screen name="Save" component={SaveScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
