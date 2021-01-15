@@ -6,23 +6,26 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from "redux";
 import rootReducer from './redux/reducers';
 import thunk from 'redux-thunk';
 import MainScreen from './components/Main';
+import AddScreen from './components/main/Add';
+import SaveScreen from './components/main/Save';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC6KJkB9SJqvYj2eX1__5S16pHDPPdkECQ",
-  authDomain: "tipioh-dev.firebaseapp.com",
-  projectId: "tipioh-dev",
-  storageBucket: "tipioh-dev.appspot.com",
-  messagingSenderId: "325988342839",
-  appId: "1:325988342839:web:5ffa46171460a714e1f3b2",
-  measurementId: "G-K8Q0F9863X"
+  apiKey: "AIzaSyC--QgCWFQmGINGLbrj7LlZ6jE5Dpxd7Bw",
+  authDomain: "tipioh-dev-877b6.firebaseapp.com",
+  projectId: "tipioh-dev-877b6",
+  storageBucket: "tipioh-dev-877b6.appspot.com",
+  messagingSenderId: "284711857648",
+  appId: "1:284711857648:web:011aa78628acf3f3e1c135",
+  measurementId: "G-TRC09SHG4M"
 };
 
 if (firebase.apps.length === 0) { // No Firebase Instance
@@ -69,7 +72,8 @@ export class App extends Component {
     if (!loggedIn) {
       return (
         <NavigationContainer>
-        {/* 앱을 실행시키면 무조건 Landing Page로 간다. */}
+        {/* 앱을 실행시키면 무조건 Landing Page로 간다.
+            Stack.Navigator는 무조건 NavigationContainer 컴포넌트 안에 있어야 한다. */}
         <Stack.Navigator initialRouteName="Landing"> 
           <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}} />
           <Stack.Screen name="Register" component={RegisterScreen} />
@@ -80,7 +84,15 @@ export class App extends Component {
 
     return (
       <Provider store={store}>
-        <MainScreen/>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main"> 
+            <Stack.Screen name="Main" component={MainScreen} options={{headerShown: false}} />
+            {/* Main 화면에서 Add 버튼을 누르면 Main 화면 위에 stack으로 Add 창이 생김 
+                navigation을 props로 사용*/}
+            <Stack.Screen name="Add" component={AddScreen} navigation={this.props.navigation} />
+            <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation}/>
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     )
   }
