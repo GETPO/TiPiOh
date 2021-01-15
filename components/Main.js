@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchUser } from '../redux/actions/index'
+import { fetchUser, fetchUserPost} from '../redux/actions/index'
 
 import FeedScreen from './main/Feed'
 import RankingScreen from './main/Ranking'
@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator();
 export class Main extends Component {
     componentDidMount(){
         this.props.fetchUser();
+        this.props.fetchUserPost();
     }
     render() {
         const {currentUser} = this.props;
@@ -73,6 +74,6 @@ export class Main extends Component {
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser
 })
-const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser}, dispatch)
+const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser, fetchUserPost}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchProps)(Main);
