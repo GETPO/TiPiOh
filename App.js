@@ -9,8 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack'
 import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
-import MainScreen, { Main } from './components/Main'
+import MainScreen from './components/Main'
 import WriteScreen from './components/main/Write'
+import SaveScreen from './components/main/Save'
 
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
@@ -84,7 +85,8 @@ export class App extends Component {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Main">
               <Stack.Screen name="Main" component={MainScreen} options={{headerShown: false}}/>
-              <Stack.Screen name="WriteFunc" component={WriteScreen}/>
+              <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Save" component={SaveScreen}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
