@@ -1,4 +1,4 @@
-import { USER_POST_STATE_CHANGE, USER_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE } from "../constants"
+import { USER_POSTS_STATE_CHANGE, USER_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE } from "../constants"
 
 const initialState = {
     currentUser: null,
@@ -13,7 +13,7 @@ export const user = (state = initialState, action) => {
                 ...state,
                 currentUser: action.currentUser
             }
-        case USER_POST_STATE_CHANGE:
+        case USER_POSTS_STATE_CHANGE:
             return{
                 ...state,
                 posts: action.posts
