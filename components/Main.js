@@ -6,7 +6,7 @@ import firebase from 'firebase'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchUser, fetchUserPost} from '../redux/actions/index'
+import { fetchUser, fetchUserPost, fetchUserFollowing} from '../redux/actions/index'
 
 import FeedScreen from './main/Feed'
 import RankingScreen from './main/Ranking'
@@ -23,6 +23,7 @@ export class Main extends Component {
     componentDidMount(){
         this.props.fetchUser();
         this.props.fetchUserPost();
+        this.props.fetchUserFollowing();
     }
     render() {
         const {currentUser} = this.props;
@@ -86,6 +87,6 @@ export class Main extends Component {
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser
 })
-const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser, fetchUserPost}, dispatch)
+const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser, fetchUserPost, fetchUserFollowing}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchProps)(Main);
