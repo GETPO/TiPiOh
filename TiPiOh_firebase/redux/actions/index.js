@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE } from '../constants/index';
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE } from '../constants/index';
 
 export function fetchUser() {
     return((dispatch) => {
@@ -18,6 +18,7 @@ export function fetchUser() {
     })
 }
 
+// 사용자가 새로 post한게 생기면 trigger되는 함수 
 export function fetchUserPosts() {
     return((dispatch) => {
         firebase.firestore()                        // firestore에 접근하여
@@ -32,8 +33,24 @@ export function fetchUserPosts() {
                 const id = doc.id;
                 return {id, ...data}
             })
-            //console.log(posts)
             dispatch({type: USER_POSTS_STATE_CHANGE, posts})
+        })
+    })
+}
+
+// userFollow 컬렉션에 변화가 생기면 trigger 되는 함수
+export function fetchUserFollowing() {
+    return((dispatch) => {
+        firebase.firestore()                        
+        .collection("following")                        
+        .doc(firebase.auth().currentUser.uid)       
+        .collection("userFollowing")                   
+        .onSnapshot((snapshot) => {                       
+            let following = snapshot.docs.map(doc => { 
+                const id = doc.id;
+                return id
+            })
+            dispatch({type: USER_FOLLOWING_STATE_CHANGE, following})
         })
     })
 }
