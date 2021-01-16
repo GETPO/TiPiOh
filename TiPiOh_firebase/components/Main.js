@@ -2,13 +2,16 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchUser } from "../redux/actions/index";
+import { fetchUser, fetchUserPosts, fetchUserFollowing } from "../redux/actions/index";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import FeedScreen from './main/Feed';
 import ProfileScreen from './main/Profile';
+import SearchScreen from './main/Search';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import firebase from 'firebase';
 
 const Tab = createMaterialBottomTabNavigator();
+
 const EmptyScreen = () => {
     return(null)
 }
@@ -16,6 +19,8 @@ const EmptyScreen = () => {
 export class Main extends Component {
     componentDidMount() {
         this.props.fetchUser();
+        this.props.fetchUserPosts();
+        this.props.fetchUserFollowing();
     }
     render() {
         return (
@@ -25,6 +30,12 @@ export class Main extends Component {
                     options={{
                         tabBarIcon: ( {color, size} ) => (
                             <MaterialCommunityIcons name="home" color={color} size={26}/>
+                        )
+                    }}/>
+                <Tab.Screen name="Search" component={SearchScreen} navigation={this.props.navigation}
+                    options={{
+                        tabBarIcon: ( {color, size} ) => (
+                            <MaterialCommunityIcons name="magnify" color={color} size={26}/>
                         )
                     }}/>
                  <Tab.Screen name="AddContainer" component={EmptyScreen}
@@ -40,6 +51,12 @@ export class Main extends Component {
                         )
                     }}/>
                  <Tab.Screen name="Profile" component={ProfileScreen}
+                    listeners={({ navigation }) => ({
+                        tabPress: event => {
+                            event.preventDefault();
+                            navigation.navigate("Profile", {uid: firebase.auth().currentUser.uid})
+                        }
+                    })}
                     options={{
                         tabBarIcon: ( {color, size} ) => (
                             <MaterialCommunityIcons name="account-circle" color={color} size={26}/>
@@ -54,7 +71,7 @@ const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser
 })
 // fetchUser함수와 dispatch를 쉽게 연동할 수 있는 redux 기능
-const mapDispatchToProps = (dispatch) => bindActionCreators({fetchUser}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
 
 /*
  * connect는 Provider 컴포넌트 하위의 컴포넌트들이 쉽게 store에 접근할 수 있게 만든다.

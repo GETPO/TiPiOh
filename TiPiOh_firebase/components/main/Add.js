@@ -38,7 +38,7 @@ export default function Add({ navigation }) {
       quality: 1,
     });
 
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
