@@ -2,15 +2,17 @@ import React, { Component } from 'react'
 import {View, Text} from 'react-native'
 import { createBottomTabNavigator }from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import firebase from 'firebase'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchUser } from '../redux/actions/index'
+import { fetchUser, fetchUserPosts, fetchUserFollowing} from '../redux/actions/index'
 
 import FeedScreen from './main/Feed'
 import RankingScreen from './main/Ranking'
 import NotificationScreen from './main/Notification'
 import ProfileScreen from './main/Profile'
+import SearchScreen from './main/Search'
 
 const EmptyScreen = () => {
     return(null)
@@ -20,6 +22,8 @@ const Tab = createBottomTabNavigator();
 export class Main extends Component {
     componentDidMount(){
         this.props.fetchUser();
+        this.props.fetchUserPosts();
+        this.props.fetchUserFollowing();
     }
     render() {
         const {currentUser} = this.props;
@@ -40,6 +44,8 @@ export class Main extends Component {
                     iconName = focused ? 'ios-file-tray' : 'ios-file-tray-outline';
                     } else if (route.name === 'Ranking') {
                     iconName = focused ? 'ios-hand-right' : 'ios-hand-right-outline';
+                    } else if (route.name === 'Search') {
+                    iconName = focused ? 'ios-hand-right' : 'ios-hand-right-outline';
                     } else if (route.name === 'Write') {
                     iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
                     } else if (route.name === 'Notification') {
@@ -54,7 +60,8 @@ export class Main extends Component {
                 })}
             >
             <Tab.Screen name="Feed" component={FeedScreen} />
-            <Tab.Screen name="Ranking" component={RankingScreen} />
+            {/* <Tab.Screen name="Ranking" component={RankingScreen} /> */}
+            <Tab.Screen name="Search" component={SearchScreen} navigation={this.props.navigation} />
             <Tab.Screen name="Write" component={EmptyScreen}
                 listeners={({navigation}) => ({
                     tabPress: event =>{
@@ -64,7 +71,14 @@ export class Main extends Component {
                 })} 
             />
             <Tab.Screen name="Notification" component={NotificationScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Profile" component={ProfileScreen} 
+                listeners={({navigation}) => ({
+                    tabPress: event =>{
+                        event.preventDefault();
+                        navigation.navigate("Profile", {uid: firebase.auth().currentUser.uid})
+                    }
+                })} 
+            />
           </Tab.Navigator>
         )
     }
@@ -73,6 +87,6 @@ export class Main extends Component {
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser
 })
-const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser}, dispatch)
+const mapDispatchProps = (dispatch) => bindActionCreators({fetchUser, fetchUserPosts, fetchUserFollowing}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchProps)(Main);
