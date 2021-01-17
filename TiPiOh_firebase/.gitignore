@@ -1,5 +1,7 @@
 node_modules/**/*
+/frontend/node_modules/**/*
 .expo/*
+/frontend/.expo/*
 npm-debug.*
 *.jks
 *.p8
@@ -8,6 +10,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+
+frontend/FirebaseConfig.js
 
 # macOS
 .DS_Store
