@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { View, Text } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,18 +15,18 @@ import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import SaveScreen from './components/main/Save';
 import CommentScreen from './components/main/Comment';
-
+import FirebaseConfig from './FirebaseConfig';
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC--QgCWFQmGINGLbrj7LlZ6jE5Dpxd7Bw",
-  authDomain: "tipioh-dev-877b6.firebaseapp.com",
-  projectId: "tipioh-dev-877b6",
-  storageBucket: "tipioh-dev-877b6.appspot.com",
-  messagingSenderId: "284711857648",
-  appId: "1:284711857648:web:011aa78628acf3f3e1c135",
-  measurementId: "G-TRC09SHG4M"
+  apiKey: FirebaseConfig.apiKey,
+  authDomain: FirebaseConfig.authDomain,
+  projectId: FirebaseConfig.projectId,
+  storageBucket: FirebaseConfig.storageBucket,
+  messagingSenderId: FirebaseConfig.messagingSenderId,
+  appId: FirebaseConfig.appId,
+  measurementId: FirebaseConfig.measurementId
 };
 
 if (firebase.apps.length === 0) { // No Firebase Instance
