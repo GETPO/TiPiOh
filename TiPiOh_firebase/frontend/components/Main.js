@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchUser, fetchUserPosts, fetchUserFollowing } from "../redux/actions/index";
+import { fetchUser, fetchUserPosts, fetchUserFollowing, clearData } from "../redux/actions/index";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import FeedScreen from './main/Feed';
 import ProfileScreen from './main/Profile';
@@ -18,6 +18,7 @@ const EmptyScreen = () => {
 
 export class Main extends Component {
     componentDidMount() {
+        this.props.clearData();
         this.props.fetchUser();
         this.props.fetchUserPosts();
         this.props.fetchUserFollowing();
@@ -71,7 +72,7 @@ const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser
 })
 // fetchUser함수와 dispatch를 쉽게 연동할 수 있는 redux 기능
-const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing, clearData }, dispatch);
 
 /*
  * connect는 Provider 컴포넌트 하위의 컴포넌트들이 쉽게 store에 접근할 수 있게 만든다.

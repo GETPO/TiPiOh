@@ -80,6 +80,11 @@ function Profile(props) {
             .delete()
     }
 
+    // Logout 기능을 수행하는 함수
+    const onLogout = () => {
+        firebase.auth().signOut();
+    }
+
     if (user === null) {                                    // user가 없는 경우 발생 시 빈 페이지 리턴 
         return <View/>
     }
@@ -107,7 +112,12 @@ function Profile(props) {
                             />
                         ) }
                     </View>
-                ) : null }
+                ) : 
+                    <Button
+                        title="Log out"
+                        onPress={ () => onLogout() }
+                    /> 
+                }
             </View>
 
             {/* 사용자가 업로드한 이미지들이 나타나는 View */}

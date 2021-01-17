@@ -1,10 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { View, Text } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
+import LoginScreen from './components/auth/Login';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { Provider } from 'react-redux';
@@ -14,18 +14,19 @@ import thunk from 'redux-thunk';
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import SaveScreen from './components/main/Save';
-
+import CommentScreen from './components/main/Comment';
+import FirebaseConfig from './FirebaseConfig';
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC--QgCWFQmGINGLbrj7LlZ6jE5Dpxd7Bw",
-  authDomain: "tipioh-dev-877b6.firebaseapp.com",
-  projectId: "tipioh-dev-877b6",
-  storageBucket: "tipioh-dev-877b6.appspot.com",
-  messagingSenderId: "284711857648",
-  appId: "1:284711857648:web:011aa78628acf3f3e1c135",
-  measurementId: "G-TRC09SHG4M"
+  apiKey: FirebaseConfig.apiKey,
+  authDomain: FirebaseConfig.authDomain,
+  projectId: FirebaseConfig.projectId,
+  storageBucket: FirebaseConfig.storageBucket,
+  messagingSenderId: FirebaseConfig.messagingSenderId,
+  appId: FirebaseConfig.appId,
+  measurementId: FirebaseConfig.measurementId
 };
 
 if (firebase.apps.length === 0) { // No Firebase Instance
@@ -69,7 +70,7 @@ export class App extends Component {
         </View>
       )
     }
-    if (!loggedIn) {
+    if (!loggedIn) {  // Login이 안 됐거나, Logout 버튼을 누르면 이 화면으로 넘어온다.
       return (
         <NavigationContainer>
         {/* 앱을 실행시키면 무조건 Landing Page로 간다.
@@ -77,6 +78,7 @@ export class App extends Component {
         <Stack.Navigator initialRouteName="Landing"> 
           <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}} />
           <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       )
@@ -91,6 +93,7 @@ export class App extends Component {
                 navigation을 props로 사용*/}
             <Stack.Screen name="Add" component={AddScreen} navigation={this.props.navigation} />
             <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation}/>
+            <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

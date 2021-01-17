@@ -44,6 +44,7 @@ export default function Save(props) {
             .add({                                      // 객체를 추가한다.
                 downloadURL,
                 caption,
+                likesCount: 0,
                 creation: firebase.firestore.FieldValue.serverTimestamp()
             }).then((function () {
                 props.navigation.popToTop() // 이미지 업로드를 하고 나면 Main page로 돌아가는 기능
