@@ -98,7 +98,7 @@ export function fetchUsersFollowingPosts(uid) {
         .get()                                      // 확인한 것을 가지고 옴
         .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
             const uid = snapshot.query.EP.path.segments[1];
-            //console.log({snapshot, uid});
+            console.log({snapshot, uid});
             const user = getState().usersState.users.find(el => el.uid === uid);
             
             let posts = snapshot.docs.map(doc => {  // map은 docs를 iterate(순차적으로 접근)해서 원하는 정보만 뽑아서 배열로 리턴한다.
@@ -107,7 +107,7 @@ export function fetchUsersFollowingPosts(uid) {
                 return {id, ...data, user}
             })
             console.log(posts);
-            dispatch({type: USERS_POSTS_STATE_CHANGE, posts, uid})  // 새로운게 발견되면 userLoaded가 +1 된다.
+            dispatch({type: USERS_POSTS_STATE_CHANGE, posts, uid})  // 새로운게 발견되면 usersLoaded가 +1 된다.
             console.log(getState());
         })
     })
