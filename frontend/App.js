@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Colors } from 'react-native-paper';
 
 import firebase from 'firebase'
 import { NavigationContainer } from '@react-navigation/native'
@@ -69,7 +70,7 @@ export class App extends Component {
     if(!loaded){
       return(
         <View style = {{flex: 1, justifyContent: 'center'}}>
-          <Text> Loading </Text>
+          <ActivityIndicator animating={true} color={Colors.red800} />
         </View>
       )
     }
