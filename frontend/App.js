@@ -2,11 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator, Colors } from 'react-native-paper';
-
 import firebase from 'firebase'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-
 import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
@@ -14,15 +12,14 @@ import MainScreen from './components/Main'
 import WriteScreen from './components/main/Write'
 import SaveScreen from './components/main/Save'
 import CommentScreen from './components/main/Comment'
-
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
 import thunk from 'redux-thunk'
+import fbconfig from './config/FirebaseConfig'
 
 const Stack = createStackNavigator();
 const store = createStore(rootReducer,applyMiddleware(thunk))
-import fbconfig from './config/FirebaseConfig'
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {

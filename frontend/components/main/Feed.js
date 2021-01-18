@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, FlatList, Button } from 'react-native';
+import { StyleSheet, Image, FlatList } from 'react-native';
+import { Avatar, Card, IconButton, Colors } from 'react-native-paper';
 import { connect } from 'react-redux';
 import firebase from "firebase";
 require('firebase/firestore')
@@ -14,15 +15,14 @@ function Feed(props) {
          */
         if (props.usersFollowingLoaded == props.following.length && props.following.length !== 0) {
             props.feed.sort(function(x, y) {
-                return x.creation - y.creation
+                return x.creation - y.creation;
             })
             setPosts(props.feed);
         }
-        console.log(posts);
-
     }, [props.usersFollowingLoaded, props.feed])             // 배열 안에 있는 원소가 최신화가 됐을 때만 useEffect를 실행한다.
 
     const onLikePress = (userId, postId) => {
+        console.log("Like Occur");
         firebase.firestore()                            // firestore에 접근하여
             .collection("posts")                        // 'posts' 컬렉션에 접근하고
             .doc(userId)                                   // currentUser의 uid를 기반의 doc에서
@@ -43,33 +43,47 @@ function Feed(props) {
             .delete()
     }
 
+    const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+
     return (
         // Profile tab의 View
-        <View style={styles.container}>
+        <Card style={styles.container}>
             {/* 사용자가 업로드한 이미지들이 나타나는 View */}
-            <View style={styles.containerGallery}>
+            <Card style={styles.containerGallery}>
                 <FlatList
                     numColumns={ 1 } 
                     horizontal={false}
                     data={posts}                            // mapStateToProps함수 실행 후 갖고오게 된 posts 배열
                     renderItem={({item}) => (               // item => usersPosts의 object
-                        <View style={styles.containerImage}>
-                            <Text style={styles.container}>{item.user.name}</Text>
-                            <Image 
-                                style={styles.image}
-                                source={{uri: item.downloadURL}}
-                            />
-                            {item.currentUserLike ? (<Button title="Dislike" onPress={() => onDislikePress(item.user.uid, item.id)}/>)
-                                                  : (<Button title="Like" onPress={() => onLikePress(item.user.uid, item.id)}/>)}
-                            <Text onPress={() => props.navigation.navigate('Comment', {postId: item.id, uid: item.user.uid})}>
-                                View Comment...
-                            </Text>
-                        </View>
+                        <Card style={styles.containerImage}>
+                            <Card.Title title={item.user.name} subtitle="위치 태그가 들어가면 좋을듯? ex) 국립현대미술관" left={LeftContent} />
+                                <Image
+                                    style={styles.image}
+                                    source={{uri: item.downloadURL}}
+                                />
+                                <Card.Actions>
+                                    {item.currentUserLike ? (<IconButton icon="tshirt-crew"
+                                                                         color={Colors.red500}
+                                                                         size={28}
+                                                                         onPress={() => onDislikePress(item.user.uid, item.id)} />
+                                                            )
+                                                          : (<IconButton icon="tshirt-crew-outline"
+                                                                         color={Colors.black}
+                                                                         size={28}
+                                                                         onPress={() => onLikePress(item.user.uid, item.id)} />
+                                                            )
+                                    }
+                                    <IconButton icon="comment-text-outline"
+                                                color={Colors.black}
+                                                size={24}
+                                                onPress={() => props.navigation.navigate('Comment', {postId: item.id, uid: item.user.uid})} />
+                                </Card.Actions>
+                        </Card>
                     )}
                 />
-            </View>
+            </Card>
 
-        </View>
+        </Card>
     )
 }
 
