@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, FlatList } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph, TextInput, IconButton, Colors } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { StyleSheet, Image, FlatList } from 'react-native';
+import { Avatar, Card, IconButton, Colors } from 'react-native-paper';
 import { connect } from 'react-redux';
 import firebase from "firebase";
 require('firebase/firestore')
