@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { View, TextInput, Image, Button } from "react-native";
+import React, { useState, useEffect } from 'react'
+import { View, TextInput, Image, Button, Text, StyleSheet } from "react-native";
+import { List } from 'react-native-paper';
 import firebase from 'firebase';
 require("firebase/firestore")
 require("firebase/firebase-storage")
@@ -9,6 +10,13 @@ require("firebase/firebase-storage")
 export default function Save(props) {
     // 이미지 설명 -> caption, setCaption 함수로 react에게 입력한 값 전달
     const [caption, setCaption] = useState("")
+    const [imageURI, setImageURI] = useState("")
+    const [time, setTime] = useState("")
+    const [expanded, setExpanded] =useState(true)
+
+    useEffect(() => {
+        setImageURI(props.route.params.image)
+    }, [imageURI])
     const uploadImage = async() => {
         const uri = props.route.params.image;
         // 이미지가 저장될 Firebase의 Storage 경로
@@ -50,15 +58,72 @@ export default function Save(props) {
                 props.navigation.popToTop() // 이미지 업로드를 하고 나면 Main page로 돌아가는 기능
             }))
     }
-    return (
-        <View style={{flex:1}}>
-            <Image source={{uri: props.route.params.image}}/>
-            <TextInput
-                placeholder="Write a Caption ..."
-                onChangeText={(caption) => setCaption(caption)}
-            />
 
-            <Button title="Save" onPress={() => uploadImage()}/>
+    const handlePress = () => setExpanded(!expanded);
+
+    return (
+
+        <View style={sytles.container}>
+            <View style={sytles.ImageView}>
+             <Image
+                style={sytles.Imagestyle}
+                source={{uri:imageURI}}/>
+            </View>
+            <View style={sytles.contents}>
+                <List.Section title={<Text style={{fontSize:10}}>Time </Text>}>
+                    <List.Accordion
+                        title={<Text style={{fontSize:10}}>Season</Text>}
+                        // left={props => <List.Icon {...props} size={10} icon="folder" />}
+                        expanded={expanded}
+                        onPress={handlePress}
+                        >
+                        <List.Item title="Spring" />
+                        <List.Item title="Summer" />
+                        <List.Item title="Fall" />
+                        <List.Item title="Winter" />
+                    </List.Accordion>
+                </List.Section>
+                <List.Section title ={<Text style={{fontSize:10}}>Place </Text>}>
+                    <List.Accordion
+                        title={<Text style={{fontSize:10}}>Place</Text>}
+                        >
+                            <List.Item title="Here"/>
+                        </List.Accordion>
+                </List.Section>
+                <TextInput
+                    placeholder="Write a Caption ..."
+                    onChangeText={(caption) => setCaption(caption)}
+                />
+                <Button title="Save" onPress={() => uploadImage()} />
+            </View>
         </View>
     )
 }
+
+const sytles = StyleSheet.create({
+    container:{
+        flex: 1,
+        padding: 10,
+        backgroundColor: 'white',
+    },
+    ImageView: {
+        width:'100%',
+        height:'50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    Imagestyle:{
+        width: '100%',
+        height: '100%',
+        resizeMode:'contain',
+    },
+    contens:{
+        flexDirection:'row',
+        justifyContent: 'space-between',
+
+    },
+    listcontainer: {
+        flex: 1,
+        flexDirection: 'row'
+    },
+})
