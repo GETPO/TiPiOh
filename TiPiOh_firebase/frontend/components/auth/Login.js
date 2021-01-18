@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, Button, TextInput } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import firebase from 'firebase';
+import { TextInput, Button, Headline } from 'react-native-paper';
 
 export class Login extends Component {
     constructor(props) {
@@ -23,23 +24,59 @@ export class Login extends Component {
     }
     render() {
         return (
-            <View>
+            <View style={styles.default}>
+                <Headline
+                    style={styles.header}
+                >TiPiOh!</Headline>
                 <TextInput 
+                    label="Email"
                     placeholder="email"
+                    left={<TextInput.Icon name= "email-outline"/>}
                     onChangeText={(inputEmail) => this.setState({email: inputEmail})}
                 />
                 <TextInput 
+                    label="Password"
                     placeholder="password"
+                    left={<TextInput.Icon name= "lock-outline"/>}
                     secureTextEntry={true}
                     onChangeText={(inputPassword) => this.setState({password: inputPassword})}
                 />
+                <View style={{flexDirection:'row'}}>
+                  <Button
+                    style={styles.button}
+                    icon="login"
+                    mode="outlined"
+                    onPress={() => this.onSignUp()}>
+                Login
+                </Button>
                 <Button
-                    onPress={() => this.onSignUp()}
-                    title="Sign In"
-                />
+                    style={styles.button}
+                    icon="account-check-outline"
+                    mode="outlined"
+                    onPress={() => this.onSignUp()}>
+                Sign Up
+                </Button>
+                </View>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    header: {
+        padding: 30,
+        alignSelf: "center",
+        fontSize: 40,
+        margin: 30 
+    },
+    default: {
+        padding: 40
+    },
+    button: {
+        flex: 1,
+        margin: 15,
+        width: 100,
+    }
+})
 
 export default Login
