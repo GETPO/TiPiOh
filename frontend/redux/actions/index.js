@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 require('firebase/firestore')
-import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, CLEAR_DATA, USERS_LIKES_STATE_CHANGE } from '../constants/index';
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, CLEAR_DATA, USERS_LIKES_STATE_CHANGE, USERS_COMMENTS_STATE_CHANGE } from '../constants/index';
 import { SnapshotViewIOSComponent } from 'react-native';
 
 // 사용자가 바뀌면 redux에 저장된 모든 데이터를 초기화해서 새로 로그인한 사용자에 맞게 Feed 최신화할 수 있게 만드는 기초 작업
@@ -106,11 +106,10 @@ export function fetchUsersFollowingPosts(uid) {
         .collection("posts")                        // 'posts' 컬렉션에 접근하고
         .doc(uid)                                   // currentUser의 uid를 기반의 doc에서
         .collection("userPosts")                    // userPosts 컬렉션에 접근
-        .orderBy("creation", "asc")                 // 생성된 날짜를 기반으로 오름차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
+        .orderBy("creation", "desc")                // 생성된 날짜를 기반으로 내림차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
         .get()                                      // 확인한 것을 가지고 옴
         .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
             const uid = snapshot.query.EP.path.segments[1];
-            console.log({snapshot, uid});
             const user = getState().usersState.users.find(el => el.uid === uid);
             
             let posts = snapshot.docs.map(doc => {  // map은 docs를 iterate(순차적으로 접근)해서 원하는 정보만 뽑아서 배열로 리턴한다.

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, FlatList, Button, TextInput } from 'react-native'
+import { View, FlatList, Text } from 'react-native'
 import firebase from 'firebase'
 require('firebase/firestore')
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchUsersData } from '../../redux/actions/index'
+import { fetchUsersData, fetchUsersFollowingComments } from '../../redux/actions/index'
+import { Paragraph, Subheading, TextInput, Button } from 'react-native-paper'
 
 function Comment(props) {
     const [comments, setComments] = useState([]);
@@ -36,8 +37,7 @@ function Comment(props) {
                 .collection('userPosts')
                 .doc(props.route.params.postId)
                 .collection('comments')
-                .get()
-                .then((snapshot) => {
+                .onSnapshot((snapshot) => {                         // data에 변화가 있을 때 마다 새로 가져오는거
                     let comments = snapshot.docs.map(doc => {
                         const data = doc.data();
                         const id = doc.id;
@@ -64,47 +64,43 @@ function Comment(props) {
                     text                                            // setText메소드로 입력한 text를 객체로 전달한다.
                 })
     }
-
     return (
-        <View>
-            <FlatList
-                numColumns={ 1 }
-                horizontal={false}
-                data={comments}
-                renderItem={({item}) => (           // View Comment 버튼을 누른 해당 Post의 posts->userPost->comment 컬렉션에 접근한다.
-                    <View>
-                        {item.user !== undefined ? <Text>{item.user.name}</Text> : null}
-                        <Text>{item.text}</Text>
-                    </View>
-                )}
-            />
-            <View>
-                <TextInput
-                    placeholder='comment...'
-                    onChangeText={(text) => setText(text)}
+        <View style={{margin: 10}}>
+                <View>
+                    <TextInput style={{height: 40}} mode='outlined' placeholder="Comment..." onChangeText={(text) => setText(text)} />
+                    <Button style={{marginTop: 3, marginBottom: 10}} mode='contained' onPress={() => onCommentSend()}>Send</Button>
+                </View>
+                <FlatList
+                    style={{margin: 5}}
+                    numColumns={ 1 }
+                    horizontal={false}
+                    data={comments}
+                    renderItem={({item}) => (           // View Comment 버튼을 누른 해당 Post의 posts->userPost->comment 컬렉션에 접근한다.
+                        <View>
+                                {item.user !== undefined ? <Subheading style={{fontWeight:"500"}}>{item.user.name}
+                                                                <Paragraph>   {item.text}</Paragraph>
+                                                            </Subheading> 
+                                                            : null
+                                }
+                        </View>
+                    )}
                 />
-                <Button
-                    onPress={ () => onCommentSend() }
-                    title="Send"
-                />
-            </View>
         </View>
     )
 }
 
 const mapStateToProps = (store) => ({
-    users: store.usersState.users
+    users: store.usersState.users,
 })
 // fetchUser함수와 dispatch를 쉽게 연동할 수 있는 redux 기능
 const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchUsersData }, dispatch);
 
 /*
  * connect는 Provider 컴포넌트 하위의 컴포넌트들이 쉽게 store에 접근할 수 있게 만든다.
- * 여기서는 (Main) 컴포넌트가 store에 접근할 수 있게 만들어진다.
+ * 여기서는 (Comment) 컴포넌트가 store에 접근할 수 있게 만들어진다.
  * 
  * mapStateToProps는 connect함수에 첫번째 인수로 들어가는 함수 혹은 객체다.
  * mapStateToProps는 기본적으로 store가 업데이트가 될때 마다 자동적으로 호출이 된다.이를 원하지 않는다면 null 혹은 undefined값을 제공해야한다.
- * 여기서는 null로 사용
  * 
  * mapDispatchToProps는 connect함수의 두번째 인자로 사용된다.
  * 이것은 기본적으로 store에 접근한 컴포넌트가 store의 상태를 바꾸기 위해
