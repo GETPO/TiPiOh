@@ -4,7 +4,7 @@ import firebase from 'firebase'
 require('firebase/firestore')
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchUsersData, fetchUsersFollowingComments } from '../../redux/actions/index'
+import { fetchUsersData } from '../../redux/actions/index'
 import { Paragraph, Subheading, TextInput, Button } from 'react-native-paper'
 
 function Comment(props) {
@@ -90,7 +90,7 @@ function Comment(props) {
 }
 
 const mapStateToProps = (store) => ({
-    users: store.usersState.users,
+    users: store.usersState.users
 })
 // fetchUser함수와 dispatch를 쉽게 연동할 수 있는 redux 기능
 const mapDispatchToProps = (dispatch) => bindActionCreators({ fetchUsersData }, dispatch);

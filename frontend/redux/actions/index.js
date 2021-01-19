@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 require('firebase/firestore')
-import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, CLEAR_DATA, USERS_LIKES_STATE_CHANGE, USERS_COMMENTS_STATE_CHANGE } from '../constants/index';
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, CLEAR_DATA, USERS_LIKES_STATE_CHANGE } from '../constants/index';
 import { SnapshotViewIOSComponent } from 'react-native';
 
 // 사용자가 바뀌면 redux에 저장된 모든 데이터를 초기화해서 새로 로그인한 사용자에 맞게 Feed 최신화할 수 있게 만드는 기초 작업
