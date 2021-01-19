@@ -22,7 +22,6 @@ function Feed(props) {
     }, [props.usersFollowingLoaded, props.feed])             // 배열 안에 있는 원소가 최신화가 됐을 때만 useEffect를 실행한다.
 
     const onLikePress = (userId, postId) => {
-        console.log("Like Occur");
         firebase.firestore()                            // firestore에 접근하여
             .collection("posts")                        // 'posts' 컬렉션에 접근하고
             .doc(userId)                                   // currentUser의 uid를 기반의 doc에서

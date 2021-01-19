@@ -11,7 +11,6 @@ function Profile(props) {
 
     useEffect(() => {
         const { currentUser, posts } = props;
-        console.log({currentUser, posts});
 
         // Search 컴포넌트에서 props로 전달 받은 uid와 currentUser.uid와 동일하다면 본인의 프로필 보여주기
         if (props.route.params.uid === firebase.auth().currentUser.uid) {
@@ -45,7 +44,6 @@ function Profile(props) {
                         const id = doc.id;
                         return {id, ...data}
                     })
-                    //console.log(posts)
                     setUserPosts(posts);
                 })
         }

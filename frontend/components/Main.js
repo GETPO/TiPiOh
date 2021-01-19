@@ -28,7 +28,7 @@ export class Main extends Component {
     }
     render() {
         const {currentUser} = this.props;
-        console.log(currentUser)
+
         if(currentUser==undefined){
             return(
                 <View><Text></Text></View>
