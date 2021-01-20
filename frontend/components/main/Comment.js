@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, Text } from 'react-native'
+import { View, FlatList, ScrollView } from 'react-native'
 import firebase from 'firebase'
 require('firebase/firestore')
 import { connect } from 'react-redux'
@@ -65,11 +65,11 @@ function Comment(props) {
                 })
     }
     return (
-        <View style={{margin: 10}}>
-                <View>
-                    <TextInput style={{height: 40}} mode='outlined' placeholder="Comment..." onChangeText={(text) => setText(text)} />
-                    <Button style={{marginTop: 3, marginBottom: 10}} mode='contained' onPress={() => onCommentSend()}>Send</Button>
-                </View>
+        <ScrollView style={{margin: 10}}>
+            <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row', marginBottom: 15}}>
+                <TextInput style={{height: 40, flex: 1}} mode='flat' placeholder="Comment..." returnKeyType="done" onChangeText={(text) => setText(text)} clearButtonMode="always"/>
+                <Button style={{height: 40}} mode='contained' onPress={() => onCommentSend()}>Send</Button>
+            </View>
                 <FlatList
                     style={{margin: 5}}
                     numColumns={ 1 }
@@ -85,7 +85,7 @@ function Comment(props) {
                         </View>
                     )}
                 />
-        </View>
+        </ScrollView>
     )
 }
 
