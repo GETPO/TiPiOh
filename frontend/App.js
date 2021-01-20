@@ -92,7 +92,7 @@ export class App extends Component {
                {/* Main 화면에서 Add 버튼을 누르면 Main 화면 위에 stack으로 Add 창이 생김 
                 navigation을 props로 사용*/}
               <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation}/>
-              <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
