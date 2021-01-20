@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { View,  Image, StyleSheet,} from "react-native";
-import { List, ProgressBar, Menu, TextInput, Button} from 'react-native-paper';
+import { View,  Image, StyleSheet, ScrollView} from "react-native";
+import { List, ProgressBar, Menu, TextInput} from 'react-native-paper';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Datepicker, Layout, Text, IconRegistry ,Input, Icon } from '@ui-kitten/components';
+import { ApplicationProvider, Datepicker, Layout, Text, IconRegistry ,Input, Icon,Button, NativeDateService  } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import firebase from 'firebase';
 require("firebase/firestore")
@@ -61,74 +61,116 @@ export default function Save(props) {
                 downloadURL,
                 caption,
                 likesCount: 0,
+                tpotime,
                 creation: firebase.firestore.FieldValue.serverTimestamp(),
-                time
             }).then((function () {
                 props.navigation.popToTop() // 이미지 업로드를 하고 나면 Main page로 돌아가는 기능
             }))
     }
 
-
+    const upload = (props) => (
+        <Icon {...props} animation='pulse' name='arrow-circle-up'/>
+      );
     return (
         <>
             <IconRegistry icons={EvaIconsPack} />
             <ApplicationProvider {...eva} theme={eva.light}>
-                <View style={sytles.container}>
-                <ProgressBar progress={saveTime}/>
-                    <View style={sytles.ImageView}>
-                    <Image
-                        style={sytles.Imagestyle}
-                        source={{uri:imageURI}}/>
+                <View style={styles.container}>
+                    <View style={styles.imageview}>
+                        <Image
+                            style={styles.image}
+                            source={{uri:imageURI}}/>
                     </View>
-                    <View style={{flex:1 , flexDirection:'row'}}>
-                        <Datepicker
-                            label='Time'
-                            min={new Date(1900)}
-                            max={new Date(now.getFullYear(), now.getMonth(), now.getDate())}
-                            size='small'
-                            date={time}
-                            onSelect={nextDate => setTime(nextDate)}
-                        />
+                    <View style={styles.scrollview}> 
+                        <ScrollView>
+                            <Datepicker
+                                label='Time'
+                                min={new Date(1900)}
+                                max={new Date(now.getFullYear(), now.getMonth(), now.getDate())}
+                                dateService={new NativeDateService('en', { format: 'YYYY년 MM월 DD일' })}
+                                size='small'
+                                date={time}
+                                onSelect={nextDate => setTime(nextDate)}
+                            />
+                            
+                        </ScrollView>
                     </View>
-                </View>
-                <View style={{flexDirection:'row'}}>
-                    <TextInput
-                        style = {{width:'85%'}}
-                        label="Comment"
-                        onChangeText={(caption) => setCaption(caption)}
-                    />
-                    <Button style = {{width:'10%'}} icon="upload" mode="outlined" onPress={() => uploadImage()}/>
+
+                    <ProgressBar progress={saveTime}/>
+                    
+                    <View style={styles.footerview} >
+                        <View style={styles.commentview}>
+                            <TextInput
+                                style={styles.commentstyle}
+                                placeholder="한마디..."
+                                onChangeText={(caption) => setCaption(caption)}
+                            />
+
+                        </View>
+                        <View style={styles.uploadview}>
+                            <Button
+                                style={styles.button}
+                                appearance='ghost'
+                                accessoryLeft={upload}
+                            />
+                        </View>
+                    </View>
                 </View>
             </ApplicationProvider>
         </>
     )
 }
 
-const sytles = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
         flex: 1,
+        marginTop: 8,
         padding: 10,
         backgroundColor: 'white',
-        marginTop: 30
     },
-    ImageView: {
-        width:'100%',
-        height:'48%',
-        justifyContent: 'center',
-        alignItems: 'center',
+    imageview:{
+        flex: 5,
+        // padding: 30,
+        marginTop: 20,
+        // backgroundColor: 'green',
+        backgroundColor: 'white',
     },
-    Imagestyle:{
+    scrollview:{
+        flex: 5,
+        // padding: 30,
+        marginTop: 5,
+        // backgroundColor: 'blue',
+        backgroundColor: 'white',
+    },
+    footerview:{
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop:10,
+        // backgroundColor: 'red',
+        backgroundColor: 'white',
+    },
+    commentview:{
+        width:"80%",
+        backgroundColor: 'white',
+    },
+    uploadview:{
+        width:"20%",
+        // backgroundColor: 'green',
+        backgroundColor: 'white',
+    },
+
+    image:{
         width: '100%',
         height: '100%',
         resizeMode:'contain',
     },
-    contens:{
-        flexDirection:'row',
-        justifyContent: 'space-between',
-
+    commentstyle:{
+       height: 40
     },
-    listcontainer: {
-        flex: 1,
-        flexDirection: 'row'
-    },
+    buttonstyle:{
+        margin:2,
+        justifyContent: 'center',
+    }
+    
 })
