@@ -1,8 +1,8 @@
-import React, { Component, useState, useEffect } from 'react'
-import { StyleSheet, View, Image, FlatList, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View, Image, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from "firebase";
-import { Paragraph, Subheading, TextInput, Button, Text, Appbar } from 'react-native-paper'
+import { Paragraph, Subheading, Button } from 'react-native-paper'
 require('firebase/firestore')
 import { Avatar } from 'react-native-paper';
 
@@ -16,7 +16,6 @@ function Profile(props) {
         const { currentUser, posts } = props;
         fetchUsers(props.route.params.uid);
         
-
         // Search 컴포넌트에서 props로 전달 받은 uid와 currentUser.uid와 동일하다면 본인의 프로필 보여주기
         if (props.route.params.uid === firebase.auth().currentUser.uid) {
             setUser(currentUser);
