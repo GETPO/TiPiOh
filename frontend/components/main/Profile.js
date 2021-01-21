@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, FlatList, Button } from 'react-native';
+import { StyleSheet, View, Image, FlatList, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from "firebase";
+import { Paragraph, Subheading, TextInput, Button, Text, Appbar } from 'react-native-paper'
+import App from '../../App';
 require('firebase/firestore')
+import { Avatar } from 'react-native-paper';
 
 function Profile(props) {
     const [ userPosts, setUserPosts ] = useState([]);
@@ -92,30 +95,33 @@ function Profile(props) {
         <View style={styles.container}>
             {/* 사용자 정보가 나타나는 View */}
             <View style={styles.containerInfo}>
-                <Text>{ user.name }</Text>
-                <Text>{ user.email }</Text>
-
-                { props.route.params.uid !== firebase.auth().currentUser.uid ? (
-                    <View>
-                        { following ? (
-                            <Button
-                                title="Following"
-                                onPress={ () => onUnfollow() }
-                            />
-                        ) : 
-                        (
-                            <Button
-                                title="Follow"
-                                onPress={ () => onFollow() }
-                            />
-                        ) }
-                    </View>
-                ) : 
-                    <Button
-                        title="Log out"
-                        onPress={ () => onLogout() }
-                    /> 
-                }
+                <View style={{ flexDirection: 'row'}}>
+                    <Avatar.Icon size={60} icon='folder'/>
+                    <Subheading style={{marginLeft: 20}}>
+                        자기소개?
+                    </Subheading>
+                </View>
+                <Paragraph style={{marginTop: 5}}>
+                    {user.name}
+                </Paragraph>
+                    { props.route.params.uid !== firebase.auth().currentUser.uid ? (
+                        <View style={{margin: 20}}>
+                            { following ? (
+                                <Button mode='contained' onPress={ () => onUnfollow() }>
+                                    Following
+                                </Button>
+                            ) : 
+                            (
+                                <Button mode='outlined' onPress={ () => onFollow() }>
+                                    Follow
+                                </Button>
+                            ) }
+                        </View>
+                    ) : 
+                    <Button style={{marginTop: 20}} mode='outlined' onPress={ () => onLogout() }>
+                        Sign Out
+                    </Button>
+                    }
             </View>
 
             {/* 사용자가 업로드한 이미지들이 나타나는 View */}
@@ -144,7 +150,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     containerInfo: {
-        margin: 20
+        flex: 1,
+        margin: 20,
     },
     containerGallery: {
         flex: 1
