@@ -92,7 +92,7 @@ export class App extends Component {
               <Stack.Screen name="TiPiOh!" component={MainScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Profile" component={ProfileScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation}/>
-              <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
