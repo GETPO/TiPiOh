@@ -12,6 +12,7 @@ import MainScreen from './components/Main'
 import WriteScreen from './components/main/Write'
 import SaveScreen from './components/main/Save'
 import CommentScreen from './components/main/Comment'
+import MapScreen from './components/main/Map'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
@@ -94,6 +95,7 @@ export class App extends Component {
               <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Map" component={MapScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

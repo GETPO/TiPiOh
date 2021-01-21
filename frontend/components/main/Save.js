@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { View,  Image, StyleSheet, ScrollView} from "react-native";
-import { List, ProgressBar, Menu, TextInput} from 'react-native-paper';
+import { ProgressBar, TextInput} from 'react-native-paper';
+
+import * as Location from 'expo-location';
+
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Datepicker, Layout, Text, IconRegistry ,Input, Icon,Button, NativeDateService  } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { ApplicationProvider, Datepicker, IconRegistry ,Input, Icon,Button, NativeDateService, Select, SelectItem, Divider } from '@ui-kitten/components';
+    import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
 import firebase from 'firebase';
 require("firebase/firestore")
 require("firebase/firebase-storage")
@@ -14,32 +18,94 @@ export default function Save(props) {
     // 이미지 설명 -> caption, setCaption 함수로 react에게 입력한 값 전달
     const [caption, setCaption] = useState("")
     const [imageURI, setImageURI] = useState("")
-    const [time, setTime] = useState(new Date())
-    const [saveTime, setsaveTime] = useState(0);
 
+    // TPO중 T
+    const [TPO_time, setTPOtime] = useState(new Date())
+    const [TPO_season, setTPOseason] = useState([])
+    const [selectedIndex, setSelectedIndex] = useState([]);
     const now = new Date();
+    const SeasonData = [
+          'Spring',
+          'Summer',
+          'Fall',
+          'Winter'
+    ];
 
+    // TPO중 P
+    const [TPO_region, setTPOregin] = useState([])
+    const [TPO_regioncomments, setTPOregioncomments] = useState("")
+    const [locationCheck, setlocationCheck] = useState(true)
+    
+    const [Progress, setProgress] = useState(0);
+
+    const uploadIcon = (props) => (
+        <Icon {...props} name='arrow-circle-up'/>
+    );
+    const mapIcon = (props) => (
+        <Icon {...props} name='globe-2-outline'/>
+    );
+    
+    const groupDisplayValues = selectedIndex.map(index => {
+        return SeasonData[index.row];
+    });
+    const renderOption = (title) => (
+        <SelectItem title={title}/>
+    );
+    
     useEffect(() => {
-        setImageURI(props.route.params.image)
-    }, [imageURI, saveTime])
-
+            (async () => {
+                let { status } = await Location.requestPermissionsAsync();
+                if (status !== 'granted') {
+                    setErrorMsg('Permission to access location was denied');
+                    return;
+                }
+                let location = await Location.getCurrentPositionAsync({});
+                let nowlocation ={
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                    latitudeDelta: 0.009,
+                    longitudeDelta: 0.009
+                }
+                if(locationCheck){
+                    setlocationCheck(!locationCheck)
+                    setTPOregin(nowlocation)
+                }
+            })();
+            
+            const unsubscribe = props.navigation.addListener('focus', () => {
+                if(props.route.params.region !== undefined){
+                    setTPOregin(props.route.params.region)
+                }
+            });
+            
+            let season = selectedIndex.map(idx => {
+                return SeasonData[idx.row]
+            })
+            setTPOseason(season)
+            setImageURI(props.route.params.image)
+            return unsubscribe
+            
+        }, [props,imageURI, Progress, selectedIndex])
+        
     const uploadImage = async() => {
         const uri = props.route.params.image;
         // 이미지가 저장될 Firebase의 Storage 경로
         const childPath = `post/${firebase.auth().currentUser.uid}/${Math.random().toString(36)}`;
-        //console.log(childPath);
+         //console.log(childPath);
         const response = await fetch(uri);
         const blob = await response.blob();
         const task = firebase.storage().ref().child(childPath).put(blob);
+        
+        
         // 업로드 한 이미지 크기가 어느 정도인지 확인하는 기능
         const taskProgress = snapshot => {
-            setsaveTime(0.3)
+            setProgress(0.3)
             //console.log(`transferred: ${snapshot.bytesTransferred}`)
         }
         // 업로드 한 이미지를 public하게 볼 수 있게 하는 기능
         const taskCompleted = () => {
             task.snapshot.ref.getDownloadURL().then((snapshot) => {
-                setsaveTime(1)
+                setProgress(1)
                 savePostData(snapshot);     // Storage 말고 firestore DB에 이미지 업로드 했다는 post 저장하기
                 //console.log(snapshot)
             })
@@ -61,16 +127,16 @@ export default function Save(props) {
                 downloadURL,
                 caption,
                 likesCount: 0,
-                tpotime,
+                TPO_time,
+                TPO_season,
+                TPO_regioncomments,
+                TPO_region,
                 creation: firebase.firestore.FieldValue.serverTimestamp(),
             }).then((function () {
                 props.navigation.popToTop() // 이미지 업로드를 하고 나면 Main page로 돌아가는 기능
             }))
     }
 
-    const upload = (props) => (
-        <Icon {...props} animation='pulse' name='arrow-circle-up'/>
-      );
     return (
         <>
             <IconRegistry icons={EvaIconsPack} />
@@ -81,37 +147,67 @@ export default function Save(props) {
                             style={styles.image}
                             source={{uri:imageURI}}/>
                     </View>
-                    <View style={styles.scrollview}> 
-                        <ScrollView>
-                            <Datepicker
-                                label='Time'
-                                min={new Date(1900)}
-                                max={new Date(now.getFullYear(), now.getMonth(), now.getDate())}
-                                dateService={new NativeDateService('en', { format: 'YYYY년 MM월 DD일' })}
-                                size='small'
-                                date={time}
-                                onSelect={nextDate => setTime(nextDate)}
-                            />
-                            
+                    <View style={styles.contents}> 
+                        <ScrollView style={styles.scrollview}>
+                            <Divider/>
+                            <View style={styles.timeview}>
+                                <Datepicker
+                                    style={{width:"45%"}}
+                                    label='Date'
+                                    min={new Date(1900)}
+                                    max={new Date(now.getFullYear(), now.getMonth(), now.getDate())}
+                                    dateService={new NativeDateService('en', { format: 'YYYY년 MM월 DD일' })}
+                                    size='small'
+                                    date={TPO_time}
+                                    onSelect={nextDate => setTPOtime(nextDate)}
+                                />
+                                <Select
+                                    style={{width:"50%"}}
+                                    label='Season'
+                                    size='small'
+                                    placeholder='Season'
+                                    multiSelect={true}
+                                    value={groupDisplayValues.join(', ')}
+                                    selectedIndex={selectedIndex}
+                                    onSelect={index => setSelectedIndex(index)}>
+                                    {SeasonData.map(renderOption)}
+                                </Select>
+                            </View>
+
+                            <View style={styles.placeview}>
+                                <Input
+                                    style={{width:'75%'}}
+                                    label='Place'
+                                    placeholder='Describe the place.'
+                                    onChangeText={nextValue => setTPOregioncomments(nextValue)}
+                                />
+                                <Button
+                                    style={{width:'20%', height:"10%",marginTop:22}}
+                                    appearance='outlined'
+                                    accessoryLeft={mapIcon}
+                                    onPress={() => {
+                                        props.navigation.navigate('Map', {TPO_region})
+                                    }}
+                                />
+                            </View>
                         </ScrollView>
                     </View>
 
-                    <ProgressBar progress={saveTime}/>
-                    
+                    <ProgressBar progress={Progress}/>
                     <View style={styles.footerview} >
                         <View style={styles.commentview}>
                             <TextInput
                                 style={styles.commentstyle}
-                                placeholder="한마디..."
+                                placeholder="comments..."
                                 onChangeText={(caption) => setCaption(caption)}
                             />
 
                         </View>
                         <View style={styles.uploadview}>
                             <Button
-                                style={styles.button}
                                 appearance='ghost'
-                                accessoryLeft={upload}
+                                accessoryLeft={uploadIcon}
+                                onPress={() => uploadImage()}
                             />
                         </View>
                     </View>
@@ -130,24 +226,32 @@ const styles = StyleSheet.create({
     },
     imageview:{
         flex: 5,
-        // padding: 30,
         marginTop: 20,
-        // backgroundColor: 'green',
+        backgroundColor: 'white',
+    },
+    contents:{
+        flex: 5,
+        marginTop: 5,
         backgroundColor: 'white',
     },
     scrollview:{
-        flex: 5,
-        // padding: 30,
-        marginTop: 5,
-        // backgroundColor: 'blue',
-        backgroundColor: 'white',
+        flex: 1,
+    },
+    timeview:{
+        flex: 1,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+    placeview:{
+        flex: 1,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
     },
     footerview:{
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop:10,
-        // backgroundColor: 'red',
         backgroundColor: 'white',
     },
     commentview:{
@@ -156,21 +260,20 @@ const styles = StyleSheet.create({
     },
     uploadview:{
         width:"20%",
-        // backgroundColor: 'green',
         backgroundColor: 'white',
     },
-
+    
     image:{
         width: '100%',
         height: '100%',
         resizeMode:'contain',
     },
     commentstyle:{
-       height: 40
+        height: 40
     },
     buttonstyle:{
         margin:2,
         justifyContent: 'center',
-    }
+    },
     
 })
