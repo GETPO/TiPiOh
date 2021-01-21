@@ -72,7 +72,7 @@ export class Main extends Component {
                 })} 
             />
             <Tab.Screen name="Notification" component={NotificationScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} 
+            <Tab.Screen name="Profile" component={ProfileScreen}
                 listeners={({navigation}) => ({
                     tabPress: event =>{
                         event.preventDefault();

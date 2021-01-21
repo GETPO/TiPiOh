@@ -10,9 +10,11 @@ import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
 import MainScreen from './components/Main'
 import WriteScreen from './components/main/Write'
+import ProfileScreen from './components/main/Profile'
 import SaveScreen from './components/main/Save'
 import CommentScreen from './components/main/Comment'
 import MapScreen from './components/main/Map'
+import SetProfileScreen from './components/main/setProfile'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
@@ -89,13 +91,13 @@ export class App extends Component {
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Main">
-              <Stack.Screen name="Main" component={MainScreen}/>
-               {/* Main 화면에서 Add 버튼을 누르면 Main 화면 위에 stack으로 Add 창이 생김 
-                navigation을 props로 사용*/}
+              <Stack.Screen name="TiPiOh!" component={MainScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Profile" component={ProfileScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Map" component={MapScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="ProfileSettings" component={SetProfileScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
