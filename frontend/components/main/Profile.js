@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { StyleSheet, View, Image, FlatList, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from "firebase";
 import { Paragraph, Subheading, TextInput, Button, Text, Appbar } from 'react-native-paper'
-import App from '../../App';
 require('firebase/firestore')
 import { Avatar } from 'react-native-paper';
 
@@ -11,9 +10,12 @@ function Profile(props) {
     const [ userPosts, setUserPosts ] = useState([]);
     const [ user, setUser ] = useState(null);
     const [ following, setFollowing ] = useState(false);
+    const [ searchUser, setSearchUser ] = useState([]);
 
     useEffect(() => {
         const { currentUser, posts } = props;
+        fetchUsers(props.route.params.uid);
+        
 
         // Search 컴포넌트에서 props로 전달 받은 uid와 currentUser.uid와 동일하다면 본인의 프로필 보여주기
         if (props.route.params.uid === firebase.auth().currentUser.uid) {
@@ -25,15 +27,27 @@ function Profile(props) {
             firebase.firestore()                            // firestore에 접근하여
                 .collection("users")                        // 'users' 컬렉션에 접근하고
                 .doc(props.route.params.uid)                // currentUser의 uid를 기반으로 정보를 확인
-                .get()                                      // 확인한 것을 가지고 옴
-                .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
+                .onSnapshot((snapshot) => {
                     if (snapshot.exists) {                  // 가지고 온게 있다면
                         setUser(snapshot.data());           // data를 user로 최신화 
                     }
                     else {
                         console.log('Does Not Exist');
                     }
-                })
+                })                                      // 확인한 것을 가지고 옴
+
+            // firebase.firestore()                            // firestore에 접근하여
+            //     .collection("users")                        // 'users' 컬렉션에 접근하고
+            //     .doc(props.route.params.uid)                // currentUser의 uid를 기반으로 정보를 확인
+            //     .get()                                      // 확인한 것을 가지고 옴
+            //     .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
+            //         if (snapshot.exists) {                  // 가지고 온게 있다면
+            //             setUser(snapshot.data());           // data를 user로 최신화 
+            //         }
+            //         else {
+            //             console.log('Does Not Exist');
+            //         }
+            //     })
 
             firebase.firestore()                            // firestore에 접근하여
                 .collection("posts")                        // 'posts' 컬렉션에 접근하고
@@ -86,9 +100,26 @@ function Profile(props) {
         firebase.auth().signOut();
     }
 
+    const fetchUsers = (search) => {
+        firebase.firestore()
+            .collection('users')
+            .doc(search)
+            .get()
+            .then((snapshot) => {
+                if (snapshot.exists) {                  // 가지고 온게 있다면
+                    setSearchUser(snapshot.data());           // data를 user로 최신화 
+                }
+                else {
+                    console.log('Does Not Exist');
+                }
+            })
+            console.log(searchUser);
+    }
+
     if (user === null) {                                    // user가 없는 경우 발생 시 빈 페이지 리턴 
         return <View/>
     }
+    
 
     return (
         // Profile tab의 View
@@ -98,12 +129,19 @@ function Profile(props) {
                 <View style={{ flexDirection: 'row'}}>
                     <Avatar.Icon size={60} icon='folder'/>
                     <Subheading style={{marginLeft: 20}}>
-                        자기소개?
+                        Name: {user.name + "\n"}Email: {user.email}
                     </Subheading>
                 </View>
-                <Paragraph style={{marginTop: 5}}>
-                    {user.name}
-                </Paragraph>
+                { props.route.params.uid === firebase.auth().currentUser.uid ? 
+                        <Paragraph style={{marginTop: 10}}>
+                            {firebase.auth().currentUser.displayName}
+                        </Paragraph> 
+                    :   
+                        <Paragraph style={{marginTop: 10}}>
+                            wait
+                        </Paragraph>
+                }
+                
                     { props.route.params.uid !== firebase.auth().currentUser.uid ? (
                         <View style={{margin: 20}}>
                             { following ? (
@@ -118,9 +156,14 @@ function Profile(props) {
                             ) }
                         </View>
                     ) : 
-                    <Button style={{marginTop: 20}} mode='outlined' onPress={ () => onLogout() }>
-                        Sign Out
-                    </Button>
+                        <View style={{marginTop: 20, flexDirection: 'row'}}>
+                            <Button style={{flex: 1}} mode='outlined' onPress={ () => onLogout() }>
+                                Sign Out
+                            </Button>
+                            <Button style={{flex: 1}} mode='outlined' onPress={() => props.navigation.navigate('ProfileSettings', {uid: firebase.auth().currentUser.uid})} >
+                                Settings
+                            </Button>
+                        </View>
                     }
             </View>
 
