@@ -13,6 +13,7 @@ import WriteScreen from './components/main/Write'
 import ProfileScreen from './components/main/Profile'
 import SaveScreen from './components/main/Save'
 import CommentScreen from './components/main/Comment'
+import MapScreen from './components/main/Map'
 import SetProfileScreen from './components/main/setProfile'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
@@ -92,9 +93,10 @@ export class App extends Component {
           <Stack.Navigator initialRouteName="Main">
               <Stack.Screen name="TiPiOh!" component={MainScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Profile" component={ProfileScreen} navigation={this.props.navigation}/>
-              <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="WriteFunc" component={WriteScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Map" component={MapScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="ProfileSettings" component={SetProfileScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
