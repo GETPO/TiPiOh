@@ -29,12 +29,14 @@ export class Login extends Component {
                     style={styles.header}
                 >TiPiOh!</Headline>
                 <TextInput 
+                    style={{marginBottom: 10}}
                     label="Email"
                     placeholder="email"
                     left={<TextInput.Icon name= "email-outline"/>}
                     onChangeText={(inputEmail) => this.setState({email: inputEmail})}
                 />
                 <TextInput 
+                    style={{marginBottom: 10}}
                     label="Password"
                     placeholder="password"
                     left={<TextInput.Icon name= "lock-outline"/>}
@@ -53,7 +55,8 @@ export class Login extends Component {
                     style={styles.button}
                     icon="account-check-outline"
                     mode="outlined"
-                    onPress={() => this.onSignUp()}>
+                    // onPress={() => this.onSignUp()}>
+                    onPress={() => this.props.navigation.navigate('Register')}>
                 Sign Up
                 </Button>
                 </View>
@@ -70,6 +73,7 @@ const styles = StyleSheet.create({
         margin: 30 
     },
     default: {
+        marginTop: 150,
         padding: 40
     },
     button: {
