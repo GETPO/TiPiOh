@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Image, FlatList, Text } from 'react-native';
+import { StyleSheet, Image, FlatList, Text, View } from 'react-native';
 import Moment from 'moment';
 import { Avatar, Card, IconButton, Colors, Chip } from 'react-native-paper';
 import { connect } from 'react-redux';
@@ -19,7 +19,6 @@ function Feed(props) {
                 return x.creation - y.creation;
             })
             setPosts(props.feed);
-            console.log("HH")
         }
     }, [props.usersFollowingLoaded, props.feed])             // 배열 안에 있는 원소가 최신화가 됐을 때만 useEffect를 실행한다.
 
@@ -58,7 +57,17 @@ function Feed(props) {
                     renderItem={({item}) => (               // item => usersPosts의 object
                         <Card style={styles.containerImage}>
                             <Card.Title title={item.user.name} 
-                                        subtitle={item.TPO_time&&`Date ${Moment(item.TPO_time.toDate()).format('YYYY.MM.DD')},,  Place ${item.TPO_regioncomments},, `}
+                                        subtitle={item.TPO_time&&(
+                                            <View style={{flexDirection:'row'}}>
+                                                <Text style={{fontSize:12}}>{`Date ${Moment(item.TPO_time.toDate()).format('YYYY.MM.DD')},,  `}</Text>
+                                                <Text style={{fontSize:12}}
+                                                    onPress={()=>{
+                                                        props.navigation.navigate('FeedMap',{region: item.TPO_region})
+                                                    }}
+                                                >{`Place ${item.TPO_regioncomments},, `}
+                                                </Text>
+                                            </View>
+                                        )}
                                         left={LeftContent} />
                                 <Image
                                     style={styles.image}

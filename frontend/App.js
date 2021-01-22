@@ -5,6 +5,7 @@ import { ActivityIndicator, Colors } from 'react-native-paper';
 import firebase from 'firebase'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+
 import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
@@ -15,6 +16,8 @@ import SaveScreen from './components/main/Save'
 import CommentScreen from './components/main/Comment'
 import MapScreen from './components/main/Map'
 import SetProfileScreen from './components/main/setProfile'
+import FeedMapScreen from './components/main/FeedMap'
+
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
@@ -98,6 +101,7 @@ export class App extends Component {
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Map" component={MapScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="ProfileSettings" component={SetProfileScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="FeedMap" component={FeedMapScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
