@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -20,6 +20,10 @@ export default function Write({ navigation }) {
       const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
       setHasGalleryPermission(galleryStatus.status === 'granted');
     })();
+    const unsubscribe = navigation.addListener('focus', () => {
+      setImage(null)
+  });
+   return unsubscribe
   }, []);
 
   // Take Picture 버튼 클릭 시 실행, 사진을 찍을 때, 다른 모든 동작들 정지(async)
@@ -52,42 +56,76 @@ export default function Write({ navigation }) {
     return <Text>No access to camera or gallery</Text>;
   }
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
         <View style={styles.cameraContainer}>
-            <Camera 
-                ref={ref => setCamera(ref)}
-                style={styles.fixedRatio} 
-                type={type}
-                ratio={'1:1'}/>
+          {image 
+            ? <Image source={{uri: image}} style={styles.fixedRatio}/>
+            : <Camera 
+                  ref={ref => setCamera(ref)}
+                  style={styles.fixedRatio} 
+                  type={type}
+                  ratio={'1:1'}
+              >
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    setType(
+                      type === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                    );
+                  }}
+                >
+                  <Text style={styles.text}> Flip </Text>
+                </TouchableOpacity>
+              </Camera>
+          }
         </View>
-        <Button
-            title="Flip Image"
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-        </Button>
-        {/* 사진 찍고 image state에 정보가 저장 */}
-        <Button title="Take Picture" onPress={() => takePicture()}/>
-        <Button title="Pick Image From Gallery" onPress={() => pickImage()}/>
-        {/* Save Component에서 props를 통해 image 접근이 가능해진다. */}
-        <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/>
-        {/* 갖고 있는 이미지가 있으면 불러온다. */}
-        {image && <Image source={{uri: image}} style={{flex: 1}}/>}
+        <View style={styles.buttonview}>
+          <Button
+              title="Flip Image"
+              onPress={() => {
+                setType(
+                  type === Camera.Constants.Type.back
+                    ? Camera.Constants.Type.front
+                    : Camera.Constants.Type.back
+                );
+              }}>
+          </Button>
+          {/* 사진 찍고 image state에 정보가 저장 */}
+          <Button title="Take Picture" onPress={() => takePicture()}/>
+          <Button title="Pick Image From Gallery" onPress={() => pickImage()}/>
+          {/* Save Component에서 props를 통해 image 접근이 가능해진다. */}
+          <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/>
+          {/* 갖고 있는 이미지가 있으면 불러온다. */}
+          {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
+        </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+    container:{
+      flex: 1,
+      marginTop: 10,
+      padding: 10,
+      backgroundColor: 'white',
+    },
     cameraContainer: {
         flex: 1,
+        marginTop: 20,
         flexDirection: 'row'
     },
     fixedRatio: {
         flex: 1,
         aspectRatio: 1
-    }
+    },
+    buttonview: {
+      flex: 1,
+    },
+    button: {
+      flex: 0.1,
+      alignSelf: 'flex-end',
+      alignItems: 'center',
+    },
 })
