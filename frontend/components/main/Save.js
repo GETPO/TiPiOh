@@ -322,4 +322,4 @@ const styles = StyleSheet.create({
         margin:2,
         justifyContent: 'center',
     },
-
+})
