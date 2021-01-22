@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Image, FlatList, Text, View } from 'react-native';
+import { StyleSheet, Image, FlatList, Text, View, SafeAreaView } from 'react-native';
 import Moment from 'moment';
-import { Avatar, Card, IconButton, Colors, Chip, Paragraph } from 'react-native-paper';
+import { Avatar, Card, IconButton, Colors, Chip, Paragraph, Caption } from 'react-native-paper';
 import { connect } from 'react-redux';
 import firebase from "firebase";
 require('firebase/firestore')
@@ -44,6 +44,16 @@ function Feed(props) {
     }
 
     const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+
+    if(props.following.length === 0){
+        return (
+            <SafeAreaView style={{flex:1, alignItems:'center',justifyContent:'center'}}>
+                <Caption>
+                    No Followers to Show
+                </Caption>
+            </SafeAreaView>
+        )
+    }
 
     return (
         // Profile tab의 View
