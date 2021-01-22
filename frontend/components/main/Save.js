@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View,  Image, StyleSheet, ScrollView} from "react-native";
-import { ProgressBar, TextInput} from 'react-native-paper';
+import { View,  Image, StyleSheet, ScrollView, Text} from "react-native";
+import { ProgressBar, TextInput, Chip} from 'react-native-paper';
 
 import * as Location from 'expo-location';
 
@@ -35,6 +35,10 @@ export default function Save(props) {
     const [TPO_region, setTPOregin] = useState([])
     const [TPO_regioncomments, setTPOregioncomments] = useState("")
     const [locationCheck, setlocationCheck] = useState(true)
+
+    // TPO중 O
+    const [occasiontext, setOccasiontext] = useState("")
+    const [TPO_occasion, setTPOoccasion] = useState([])
     
     const [Progress, setProgress] = useState(0);
 
@@ -44,6 +48,9 @@ export default function Save(props) {
     const mapIcon = (props) => (
         <Icon {...props} name='globe-2-outline'/>
     );
+    const plusIcon = (props) => (
+        <Icon {...props} name='plus-outline'/>
+    );
     
     const groupDisplayValues = selectedIndex.map(index => {
         return SeasonData[index.row];
@@ -51,7 +58,21 @@ export default function Save(props) {
     const renderOption = (title) => (
         <SelectItem title={title}/>
     );
-    
+        
+    const addOccasion = () => {
+        console.log(occasiontext)
+        if(occasiontext !== "")
+            setTPOoccasion([ ...TPO_occasion, occasiontext])
+        setOccasiontext("")
+        console.log(TPO_occasion)
+    }
+
+    const deleteOccasion = (item) => {
+        setTPOoccasion(TPO_occasion.filter((n) =>{
+            return n !== item
+        }))
+    }
+
     useEffect(() => {
             (async () => {
                 let { status } = await Location.requestPermissionsAsync();
@@ -85,7 +106,7 @@ export default function Save(props) {
             setImageURI(props.route.params.image)
             return unsubscribe
             
-        }, [props,imageURI, Progress, selectedIndex])
+        }, [props,imageURI, Progress, selectedIndex, TPO_occasion])
         
     const uploadImage = async() => {
         const uri = props.route.params.image;
@@ -131,6 +152,7 @@ export default function Save(props) {
                 TPO_season,
                 TPO_regioncomments,
                 TPO_region,
+                TPO_occasion,
                 creation: firebase.firestore.FieldValue.serverTimestamp(),
             }).then((function () {
                 props.navigation.popToTop() // 이미지 업로드를 하고 나면 Main page로 돌아가는 기능
@@ -190,6 +212,28 @@ export default function Save(props) {
                                     }}
                                 />
                             </View>
+                            <View style={styles.occasionview}>
+                                <View style={styles.placeview}>
+                                    <Input
+                                        style={{width:'85%'}}
+                                        label='Occasion'
+                                        placeholder='Tag Occasion.'
+                                        value={occasiontext}
+                                        onChangeText={nextValue => setOccasiontext(nextValue)}
+                                    />
+                                    <Button
+                                        style={{width:'5%', height:"10%",marginTop:22}}
+                                        appearance='outlined'
+                                        accessoryLeft={plusIcon}
+                                        onPress={addOccasion}
+                                    />
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    {TPO_occasion.map(item =>
+                                        (<Chip onClose={() => deleteOccasion(item)}>{`#${item}`}</Chip>)
+                                    )}
+                                </View>
+                            </View>
                         </ScrollView>
                     </View>
 
@@ -246,6 +290,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         flexDirection: 'row',
+    },
+    occasionview:{
+        flex: 1,
     },
     footerview:{
         flex: 1,

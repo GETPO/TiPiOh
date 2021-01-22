@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Image, FlatList } from 'react-native';
-import { Avatar, Card, IconButton, Colors } from 'react-native-paper';
+import { StyleSheet, Image, FlatList, Text } from 'react-native';
+import Moment from 'moment';
+import { Avatar, Card, IconButton, Colors, Chip } from 'react-native-paper';
 import { connect } from 'react-redux';
 import firebase from "firebase";
 require('firebase/firestore')
@@ -18,6 +19,7 @@ function Feed(props) {
                 return x.creation - y.creation;
             })
             setPosts(props.feed);
+            console.log("HH")
         }
     }, [props.usersFollowingLoaded, props.feed])             // 배열 안에 있는 원소가 최신화가 됐을 때만 useEffect를 실행한다.
 
@@ -55,7 +57,9 @@ function Feed(props) {
                     data={posts}                            // mapStateToProps함수 실행 후 갖고오게 된 posts 배열
                     renderItem={({item}) => (               // item => usersPosts의 object
                         <Card style={styles.containerImage}>
-                            <Card.Title title={item.user.name} subtitle="위치 태그가 들어가면 좋을듯? ex) 국립현대미술관" left={LeftContent} />
+                            <Card.Title title={item.user.name} 
+                                        subtitle={item.TPO_time&&`Date ${Moment(item.TPO_time.toDate()).format('YYYY.MM.DD')},,  Place ${item.TPO_regioncomments},, `}
+                                        left={LeftContent} />
                                 <Image
                                     style={styles.image}
                                     source={{uri: item.downloadURL}}
@@ -76,6 +80,7 @@ function Feed(props) {
                                                 color={Colors.black}
                                                 size={24}
                                                 onPress={() => props.navigation.navigate('Comment', {postId: item.id, uid: item.user.uid})} />
+                                    {item.TPO_occasion&&item.TPO_occasion.map(item =>( <Chip> {`#${item}`} </Chip>))}
                                 </Card.Actions>
                         </Card>
                     )}
