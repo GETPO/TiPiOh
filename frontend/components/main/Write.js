@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -56,7 +56,10 @@ export default function Write({ navigation }) {
     return <Text>No access to camera or gallery</Text>;
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={{alignItems: 'baseline'}}>
+        <Button title="Go Back" onPress={() => navigation.goBack()}/>
+      </View>
         <View style={styles.cameraContainer}>
           {image 
             ? <Image source={{uri: image}} style={styles.fixedRatio}/>
@@ -100,7 +103,7 @@ export default function Write({ navigation }) {
           {/* 갖고 있는 이미지가 있으면 불러온다. */}
           {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
         </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

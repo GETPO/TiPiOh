@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Image, FlatList, Text } from 'react-native';
 import Moment from 'moment';
-import { Avatar, Card, IconButton, Colors, Chip } from 'react-native-paper';
+import { Avatar, Card, IconButton, Colors, Chip, Paragraph } from 'react-native-paper';
 import { connect } from 'react-redux';
 import firebase from "firebase";
 require('firebase/firestore')
@@ -19,7 +19,6 @@ function Feed(props) {
                 return x.creation - y.creation;
             })
             setPosts(props.feed);
-            console.log("HH")
         }
     }, [props.usersFollowingLoaded, props.feed])             // 배열 안에 있는 원소가 최신화가 됐을 때만 useEffect를 실행한다.
 
@@ -64,6 +63,11 @@ function Feed(props) {
                                     style={styles.image}
                                     source={{uri: item.downloadURL}}
                                 />
+                                <Card.Content>
+                                    <Paragraph style={{marginTop: 10, marginBottom: -5}}>
+                                        {item.caption}
+                                    </Paragraph>
+                                </Card.Content>
                                 <Card.Actions>
                                     {item.currentUserLike ? (<IconButton icon="tshirt-crew"
                                                                          color={Colors.red500}
@@ -86,7 +90,6 @@ function Feed(props) {
                     )}
                 />
             </Card>
-
         </Card>
     )
 }

@@ -106,7 +106,7 @@ export default function Save(props) {
             setImageURI(props.route.params.image)
             return unsubscribe
             
-        }, [props,imageURI, Progress, selectedIndex, TPO_occasion])
+        }, [props,imageURI, Progress, selectedIndex, TPO_occasion, locationCheck])
         
     const uploadImage = async() => {
         const uri = props.route.params.image;
