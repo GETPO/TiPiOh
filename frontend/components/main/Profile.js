@@ -26,27 +26,15 @@ function Profile(props) {
             firebase.firestore()                            // firestore에 접근하여
                 .collection("users")                        // 'users' 컬렉션에 접근하고
                 .doc(props.route.params.uid)                // currentUser의 uid를 기반으로 정보를 확인
-                .onSnapshot((snapshot) => {
+                // .get()                                      // 확인한 것을 가지고 옴
+                .onSnapshot((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
                     if (snapshot.exists) {                  // 가지고 온게 있다면
                         setUser(snapshot.data());           // data를 user로 최신화 
                     }
                     else {
                         console.log('Does Not Exist');
                     }
-                })                                      // 확인한 것을 가지고 옴
-
-            // firebase.firestore()                            // firestore에 접근하여
-            //     .collection("users")                        // 'users' 컬렉션에 접근하고
-            //     .doc(props.route.params.uid)                // currentUser의 uid를 기반으로 정보를 확인
-            //     .get()                                      // 확인한 것을 가지고 옴
-            //     .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
-            //         if (snapshot.exists) {                  // 가지고 온게 있다면
-            //             setUser(snapshot.data());           // data를 user로 최신화 
-            //         }
-            //         else {
-            //             console.log('Does Not Exist');
-            //         }
-            //     })
+                })                                     // 확인한 것을 가지고 옴
 
             firebase.firestore()                            // firestore에 접근하여
                 .collection("posts")                        // 'posts' 컬렉션에 접근하고
@@ -70,6 +58,12 @@ function Profile(props) {
         else {
             setFollowing(false);
         }
+
+        const newProfileMessage = props.navigation.addListener('focus', () =>{
+            fetchUsers(props.route.params.uid);
+        })
+        return newProfileMessage;
+   
     }, [props.route.params.uid, props.following])             // 배열 안에 있는 원소가 최신화가 됐을 때만 useEffect를 실행한다.
 
     // Follow 버튼을 누르게 되면 아직 팔로우 중이지 않은 사용자를 팔로우 하게 된다.
@@ -112,14 +106,13 @@ function Profile(props) {
                     console.log('Does Not Exist');
                 }
             })
-            console.log(searchUser);
     }
 
     if (user === null) {                                    // user가 없는 경우 발생 시 빈 페이지 리턴 
         return <View/>
     }
-    
 
+    console.log("Search",searchUser);
     return (
         // Profile tab의 View
         <View style={styles.container}>
@@ -128,21 +121,16 @@ function Profile(props) {
                 <View style={{ flexDirection: 'row'}}>
                     <Avatar.Icon size={60} icon='folder'/>
                     <Subheading style={{marginLeft: 20}}>
-                        Name: {user.name + "\n"}Email: {user.email}
+                        Name: {searchUser.name + "\n"}Email: {searchUser.email}
                     </Subheading>
                 </View>
-                { props.route.params.uid === firebase.auth().currentUser.uid ? 
-                        <Paragraph style={{marginTop: 10}}>
-                            {firebase.auth().currentUser.displayName}
-                        </Paragraph> 
-                    :   
-                        <Paragraph style={{marginTop: 10}}>
-                            wait
-                        </Paragraph>
-                }
+
+                <Paragraph style={{marginTop: 10}}>
+                    {searchUser.intro}
+                </Paragraph>
                 
                     { props.route.params.uid !== firebase.auth().currentUser.uid ? (
-                        <View style={{margin: 20}}>
+                        <View style={{marginTop: 50}}>
                             { following ? (
                                 <Button mode='contained' onPress={ () => onUnfollow() }>
                                     Following
@@ -159,7 +147,7 @@ function Profile(props) {
                             <Button style={{flex: 1}} mode='outlined' onPress={ () => onLogout() }>
                                 Sign Out
                             </Button>
-                            <Button style={{flex: 1}} mode='outlined' onPress={() => props.navigation.navigate('ProfileSettings', {uid: firebase.auth().currentUser.uid})} >
+                            <Button style={{flex: 1}} mode='outlined' onPress={() => props.navigation.navigate('ProfileSettings', {user, uid: props.route.params.uid} )} >
                                 Settings
                             </Button>
                         </View>

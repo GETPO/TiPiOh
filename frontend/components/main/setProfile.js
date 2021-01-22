@@ -1,25 +1,18 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import { Button, TextInput, Headline, Subheading } from "react-native-paper";
 import firebase from "firebase";
 require('firebase/firestore')
 
-
 export default function setProfile(props) {
-     const [ intro, setIntro ] = useState("");
-
-    const user = firebase.auth().currentUser;
+    const [ intro, setIntro ] = useState("");
+    const currentUser = props.route.params.user;
 
     const updateIntro = () => {
-        user.updateProfile({
-            displayName: intro,
-          })
-          .then(function() {
-            console.log("update success");
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+        firebase.firestore()
+            .collection('users')
+            .doc(props.route.params.uid)
+            .update({intro: intro});
     }
 
     return (
@@ -29,7 +22,7 @@ export default function setProfile(props) {
             <Subheading style={{fontSize: 14}}>Profile Message</Subheading>
 
             <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row', marginBottom: 15}}>
-                <TextInput style={{height: 40, flex: 1}} mode='flat' placeholder={user.displayName} returnKeyType="done" onChangeText={(intro) => setIntro(intro)} clearButtonMode="always"/>
+                <TextInput style={{height: 40, flex: 1}} mode='flat' placeholder={currentUser.intro} returnKeyType="done" onChangeText={(intro) => setIntro(intro)} clearButtonMode="always"/>
                 <Button style={{height: 40}} mode='contained' onPress={() => {updateIntro(); props.navigation.goBack();}}>Update</Button>
             </View>
 
@@ -37,19 +30,3 @@ export default function setProfile(props) {
     )
 }
 
-const styles = StyleSheet.create({
-    header: {
-        padding: 30,
-        alignSelf: "center",
-        fontSize: 40,
-        margin: 30 
-    },
-    default: {
-        padding: 40
-    },
-    button: {
-        flex: 1,
-        margin: 15,
-        width: 100,
-    }
-})
