@@ -9,7 +9,6 @@ import { bindActionCreators } from 'redux'
 import { fetchUser, fetchUserPosts, fetchUserFollowing, clearData} from '../redux/actions/index'
 
 import FeedScreen from './main/Feed'
-import RankingScreen from './main/Ranking'
 import NotificationScreen from './main/Notification'
 import ProfileScreen from './main/Profile'
 import SearchScreen from './main/Search'

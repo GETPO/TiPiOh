@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Camera } from 'expo-camera';
+import { IconButton, Colors } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';
 
 // navigation 메소드를 사용하가 위해 함수 인자로 navigation을 사용
@@ -57,49 +58,54 @@ export default function Write({ navigation }) {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{alignItems: 'baseline'}}>
-        <Button title="Go Back" onPress={() => navigation.goBack()}/>
+      <View style={styles.headerContainer}>
+          <IconButton 
+            //tyle={{width:'50%'}}
+            icon="keyboard-backspace"
+            color={Colors.black}
+            size={30}
+            onPress={() => navigation.goBack()} />
+          {/* <Text style={{width:'75%', alignSelf: 'center', textAlign: 'center', fontSize:30}}>TiPiOh!</Text> */}
       </View>
         <View style={styles.cameraContainer}>
           {image 
             ? <Image source={{uri: image}} style={styles.fixedRatio}/>
             : <Camera 
                   ref={ref => setCamera(ref)}
-                  style={styles.fixedRatio} 
+                  style={styles.fixedRatio}
                   type={type}
                   ratio={'1:1'}
               >
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    setType(
-                      type === Camera.Constants.Type.back
-                        ? Camera.Constants.Type.front
-                        : Camera.Constants.Type.back
-                    );
-                  }}
-                >
-                  <Text style={styles.text}> Flip </Text>
-                </TouchableOpacity>
-              </Camera>
-          }
-        </View>
-        <View style={styles.buttonview}>
-          <Button
-              title="Flip Image"
+                <IconButton 
+                style={{alignSelf: 'flex-end'}}
+                icon="camera-retake-outline"
+              color={Colors.white}
+              size={30}
               onPress={() => {
                 setType(
                   type === Camera.Constants.Type.back
                     ? Camera.Constants.Type.front
                     : Camera.Constants.Type.back
                 );
-              }}>
-          </Button>
+              }} />
+              </Camera>
+          }
+        </View>
+        <View style={styles.buttonview}>
           {/* 사진 찍고 image state에 정보가 저장 */}
-          <Button title="Take Picture" onPress={() => takePicture()}/>
-          <Button title="Pick Image From Gallery" onPress={() => pickImage()}/>
+          <IconButton icon="image-filter-none"
+              color={Colors.black}
+              size={40}
+              onPress={() => pickImage()} />
+          <IconButton icon="circle-slice-8"
+              color={Colors.black}
+              size={80}
+              onPress={() => takePicture()} />
           {/* Save Component에서 props를 통해 image 접근이 가능해진다. */}
-          <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/>
+          <IconButton icon="content-save-outline"
+              color={Colors.black}
+              size={45}
+              onPress={() => navigation.navigate('Save', {image})} />
           {/* 갖고 있는 이미지가 있으면 불러온다. */}
           {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
         </View>
@@ -114,21 +120,32 @@ const styles = StyleSheet.create({
       padding: 10,
       backgroundColor: 'white',
     },
+    headerContainer:{
+      flex: 0.5,
+      flexDirection:'row', 
+      //justifyContent:'space-between',
+      //backgroundColor:'yellow'
+    },
     cameraContainer: {
-        flex: 1,
-        marginTop: 20,
-        flexDirection: 'row'
+        flex: 3,
+        // marginTop: 20,
+        flexDirection: 'row',
+      //backgroundColor:'blue'
+
     },
     fixedRatio: {
         flex: 1,
         aspectRatio: 1
     },
     buttonview: {
-      flex: 1,
-    },
-    button: {
-      flex: 0.1,
-      alignSelf: 'flex-end',
-      alignItems: 'center',
+        marginTop: 70,
+        marginLeft: 30,
+        marginRight: 30,
+        flex: 1.5,
+        flexDirection:'row',
+        //backgroundColor:'green',
+        // justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
 })
