@@ -32,7 +32,7 @@ export default function Save(props) {
     ];
 
     // TPO중 P
-    const [TPO_region, setTPOregin] = useState([])
+    const [TPO_region, setTPOregin] = useState({})
     const [TPO_regioncomments, setTPOregioncomments] = useState("")
     const [locationCheck, setlocationCheck] = useState(true)
 
@@ -46,7 +46,7 @@ export default function Save(props) {
         <Icon {...props} name='arrow-circle-up'/>
     );
     const mapIcon = (props) => (
-        <Icon {...props} name='globe-2-outline'/>
+        <Icon {...props} name='pin-outline'/>
     );
     const plusIcon = (props) => (
         <Icon {...props} name='plus-outline'/>
@@ -74,25 +74,27 @@ export default function Save(props) {
     }
 
     useEffect(() => {
-            (async () => {
-                let { status } = await Location.requestPermissionsAsync();
-                if (status !== 'granted') {
-                    setErrorMsg('Permission to access location was denied');
-                    return;
-                }
-                let location = await Location.getCurrentPositionAsync({});
-                let nowlocation ={
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.009,
-                    longitudeDelta: 0.009
-                }
-                if(locationCheck){
-                    setlocationCheck(!locationCheck)
-                    setTPOregin(nowlocation)
-                }
-            })();
-            
+        
+        (async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            let nowlocation ={
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.009,
+                longitudeDelta: 0.009
+            }
+            if(locationCheck){
+                console.log(nowlocation)
+                setlocationCheck(!locationCheck)
+                setTPOregin(nowlocation)
+                console.log(TPO_region,"mmm")
+            }
+        })();
             const unsubscribe = props.navigation.addListener('focus', () => {
                 if(props.route.params.region !== undefined){
                     setTPOregin(props.route.params.region)
@@ -106,7 +108,7 @@ export default function Save(props) {
             setImageURI(props.route.params.image)
             return unsubscribe
             
-        }, [props,imageURI, Progress, selectedIndex, TPO_occasion])
+        }, [props,imageURI, Progress, selectedIndex, TPO_occasion, locationCheck])
         
     const uploadImage = async() => {
         const uri = props.route.params.image;
