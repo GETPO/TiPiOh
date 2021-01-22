@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Image, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from "firebase";
-import { Paragraph, Subheading, Button } from 'react-native-paper'
+import { Paragraph, Subheading, Button, Card, Caption, Avatar } from 'react-native-paper'
 require('firebase/firestore')
-import { Avatar } from 'react-native-paper';
 
 function Profile(props) {
     const [ userPosts, setUserPosts ] = useState([]);
@@ -112,46 +111,54 @@ function Profile(props) {
         return <View/>
     }
 
-    console.log("Search",searchUser);
     return (
         // Profile tab의 View
         <View style={styles.container}>
             {/* 사용자 정보가 나타나는 View */}
             <View style={styles.containerInfo}>
-                <View style={{ flexDirection: 'row'}}>
-                    <Avatar.Icon size={60} icon='folder'/>
-                    <Subheading style={{marginLeft: 20}}>
-                        Name: {searchUser.name + "\n"}Email: {searchUser.email}
-                    </Subheading>
-                </View>
+                <Card>
+                    <View style={{alignItems: 'center'}}>
+                        <Avatar.Icon style={{marginTop: 10}} size={150} icon='alien'/>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                        <Subheading style={{marginTop: 10, fontSize: 20}}>
+                            {searchUser.name}
+                        </Subheading>
+                        <Caption style={{marginBottom: 10}}>
+                            {searchUser.email}
+                        </Caption>
+                    </View>
+                    <Card.Content style={{alignItems: 'center'}}>
+                        <Paragraph>
+                            {searchUser.intro}
+                        </Paragraph>
+                    </Card.Content>
 
-                <Paragraph style={{marginTop: 10}}>
-                    {searchUser.intro}
-                </Paragraph>
-                
                     { props.route.params.uid !== firebase.auth().currentUser.uid ? (
-                        <View style={{marginTop: 50}}>
-                            { following ? (
-                                <Button mode='contained' onPress={ () => onUnfollow() }>
-                                    Following
-                                </Button>
-                            ) : 
-                            (
-                                <Button mode='outlined' onPress={ () => onFollow() }>
-                                    Follow
-                                </Button>
-                            ) }
-                        </View>
-                    ) : 
-                        <View style={{marginTop: 20, flexDirection: 'row'}}>
-                            <Button style={{flex: 1}} mode='outlined' onPress={ () => onLogout() }>
-                                Sign Out
+                    <View style={{marginTop: 10}}>
+                        { following ? (
+                            <Button mode='contained' onPress={ () => onUnfollow() }>
+                                Following
                             </Button>
-                            <Button style={{flex: 1}} mode='outlined' onPress={() => props.navigation.navigate('ProfileSettings', {user, uid: props.route.params.uid} )} >
-                                Settings
+                        ) : 
+                        (
+                            <Button mode='outlined' onPress={ () => onFollow() }>
+                                Follow
                             </Button>
-                        </View>
-                    }
+                        ) }
+                    </View>
+                ) : 
+                    <View style={{marginTop: 10, marginBottom: 15 ,flexDirection: 'row'}}>
+                        <Button icon="logout" style={{flex: 1}}  mode='text' onPress={ () => onLogout() }>
+                            Sign Out
+                        </Button>
+                        <Button icon="account-settings-outline" style={{flex: 1}} mode='text' onPress={() => props.navigation.navigate('Profile Settings', {user, uid: props.route.params.uid} )} >
+                            Settings
+                        </Button>
+                    </View>
+                }
+                </Card>
+            
             </View>
 
             {/* 사용자가 업로드한 이미지들이 나타나는 View */}
@@ -180,8 +187,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     containerInfo: {
-        flex: 1,
-        margin: 20,
+        flex: 0,
+        margin: 10,
     },
     containerGallery: {
         flex: 1

@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import firebase from 'firebase'
 import { NavigationContainer } from '@react-navigation/native'
@@ -100,7 +99,7 @@ export class App extends Component {
               <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{headerShown: false}}/>
               <Stack.Screen name="Comment" component={CommentScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="Map" component={MapScreen} navigation={this.props.navigation}/>
-              <Stack.Screen name="ProfileSettings" component={SetProfileScreen} navigation={this.props.navigation}/>
+              <Stack.Screen name="Profile Settings" component={SetProfileScreen} navigation={this.props.navigation}/>
               <Stack.Screen name="FeedMap" component={FeedMapScreen} navigation={this.props.navigation}/>
           </Stack.Navigator>
         </NavigationContainer>

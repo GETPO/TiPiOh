@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, ScrollView } from 'react-native'
+import { View, FlatList } from 'react-native'
 import firebase from 'firebase'
 require('firebase/firestore')
 import { connect } from 'react-redux'
@@ -65,27 +65,29 @@ function Comment(props) {
                 })
     }
     return (
-        <ScrollView style={{margin: 10}}>
-            <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row', marginBottom: 15}}>
+        <View style={{margin: 10}}>
+            <View style={{justifyContent: 'center', flexDirection: 'row', marginBottom: 15}}>
                 <TextInput style={{height: 40, flex: 1}} mode='flat' placeholder="Comment..." returnKeyType="done" onChangeText={(text) => setText(text)} clearButtonMode="always"/>
                 <Button style={{height: 40}} mode='contained' onPress={() => onCommentSend()}>Send</Button>
             </View>
-                <FlatList
-                    style={{margin: 5}}
-                    numColumns={ 1 }
-                    horizontal={false}
-                    data={comments}
-                    renderItem={({item}) => (           // View Comment 버튼을 누른 해당 Post의 posts->userPost->comment 컬렉션에 접근한다.
-                        <View>
-                                {item.user !== undefined ? <Subheading style={{fontWeight:"500"}}>{item.user.name}
-                                                                <Paragraph>   {item.text}</Paragraph>
-                                                            </Subheading> 
-                                                            : null
-                                }
-                        </View>
-                    )}
-                />
-        </ScrollView>
+            
+            <FlatList
+                style={{margin: 5}}
+                numColumns={ 1 }
+                horizontal={false}
+                data={comments}
+                renderItem={({item}) => (           // View Comment 버튼을 누른 해당 Post의 posts->userPost->comment 컬렉션에 접근한다.
+                    <View>
+                            {item.user !== undefined ? <Subheading style={{fontWeight:"500"}}>{item.user.name}
+                                                            <Paragraph>   {item.text}</Paragraph>
+                                                        </Subheading> 
+                                                        : null
+                            }
+                    </View>
+                )}
+            />
+            
+        </View>
     )
 }
 

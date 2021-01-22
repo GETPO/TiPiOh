@@ -17,11 +17,11 @@ export default function setProfile(props) {
 
     return (
         <View style={{margin: 20}}>
-            <Headline style={{marginBottom: 30}}>프로필 메시지로 감정을 표현해보세요!</Headline>
+            <Headline style={{marginBottom: 30}}>Edit Profile</Headline>
 
-            <Subheading style={{fontSize: 14}}>Profile Message</Subheading>
+            <Subheading style={{fontSize: 14, marginLeft: 3}}>Profile Message</Subheading>
 
-            <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row', marginBottom: 15}}>
+            <View style={{justifyContent: 'center', flexDirection: 'row', marginBottom: 15}}>
                 <TextInput style={{height: 40, flex: 1}} mode='flat' placeholder={currentUser.intro} returnKeyType="done" onChangeText={(intro) => setIntro(intro)} clearButtonMode="always"/>
                 <Button style={{height: 40}} mode='contained' onPress={() => {updateIntro(); props.navigation.goBack();}}>Update</Button>
             </View>
