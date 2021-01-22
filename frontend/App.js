@@ -5,7 +5,6 @@ import firebase from 'firebase'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
 import MainScreen from './components/Main'
@@ -81,10 +80,10 @@ export class App extends Component {
         <NavigationContainer>
           {/* 앱을 실행시키면 무조건 Landing Page로 간다.
             Stack.Navigator는 무조건 NavigationContainer 컴포넌트 안에 있어야 한다. */}
-          <Stack.Navigator initialRouteName="Landing">
-            <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}}/>
-            <Stack.Screen name="Register" component={RegisterScreen}/>
-            <Stack.Screen name="Login" component={LoginScreen}/>
+          <Stack.Navigator initialRouteName="Login">
+            {/* <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}}/> */}
+            <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+            <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
           </Stack.Navigator>
         </NavigationContainer>
       );
