@@ -39,7 +39,7 @@ function Profile(props) {
                 .collection("posts")                        // 'posts' 컬렉션에 접근하고
                 .doc(props.route.params.uid)                // currentUser의 uid를 기반의 doc에서
                 .collection("userPosts")                    // userPosts 컬렉션에 접근
-                .orderBy("creation", "asc")                 // 생성된 날짜를 기반으로 오름차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
+                .orderBy("creation", "desc")                 // 생성된 날짜를 기반으로 오름차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
                 .get()                                      // 확인한 것을 가지고 옴
                 .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
                     let posts = snapshot.docs.map(doc => {  // map은 docs를 iterate(순차적으로 접근)해서 원하는 정보만 뽑아서 배열로 리턴한다.
@@ -98,12 +98,27 @@ function Profile(props) {
             .doc(search)
             .get()
             .then((snapshot) => {
-                if (snapshot.exists) {                  // 가지고 온게 있다면
+                if (snapshot.exists) {                        // 가지고 온게 있다면
                     setSearchUser(snapshot.data());           // data를 user로 최신화 
                 }
                 else {
                     console.log('Does Not Exist');
                 }
+            })
+
+        firebase.firestore()                            // firestore에 접근하여
+            .collection("posts")                        // 'posts' 컬렉션에 접근하고
+            .doc(props.route.params.uid)                // currentUser의 uid를 기반의 doc에서
+            .collection("userPosts")                    // userPosts 컬렉션에 접근
+            .orderBy("creation", "desc")                // 생성된 날짜를 기반으로 오름차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
+            .get()                                      // 확인한 것을 가지고 옴
+            .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
+                let posts = snapshot.docs.map(doc => {  // map은 docs를 iterate(순차적으로 접근)해서 원하는 정보만 뽑아서 배열로 리턴한다.
+                    const data = doc.data();
+                    const id = doc.id;
+                    return {id, ...data}
+                })
+                setUserPosts(posts);
             })
     }
 
@@ -152,7 +167,7 @@ function Profile(props) {
                         <Button icon="logout" style={{flex: 1}}  mode='text' onPress={ () => onLogout() }>
                             Sign Out
                         </Button>
-                        <Button icon="account-settings-outline" style={{flex: 1}} mode='text' onPress={() => props.navigation.navigate('Profile Settings', {user, uid: props.route.params.uid} )} >
+                        <Button icon="account-cog-outline" style={{flex: 1}} mode='text' onPress={() => props.navigation.navigate('Profile Settings', {searchUser, uid: props.route.params.uid} )} >
                             Settings
                         </Button>
                     </View>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { View,  Image, StyleSheet, ScrollView, Text} from "react-native";
+import { View,  Image, StyleSheet, ScrollView, Text } from "react-native";
 import { ProgressBar, TextInput, Chip} from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import * as Location from 'expo-location';
 
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Datepicker, IconRegistry ,Input, Icon,Button, NativeDateService, Select, SelectItem, Divider } from '@ui-kitten/components';
-    import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { ApplicationProvider, Datepicker, IconRegistry ,Input, Icon, Button, NativeDateService, Select, SelectItem, Divider } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 import firebase from 'firebase';
 require("firebase/firestore")
@@ -171,9 +172,9 @@ export default function Save(props) {
                             style={styles.image}
                             source={{uri:imageURI}}/>
                     </View>
-                    <View style={styles.contents}> 
-                        <ScrollView style={styles.scrollview}>
-                            <Divider/>
+                    <KeyboardAwareScrollView>
+                        <View style={styles.scrollview}>
+                            <ProgressBar progress={Progress}/>
                             <View style={styles.timeview}>
                                 <Datepicker
                                     style={{width:"45%"}}
@@ -200,14 +201,14 @@ export default function Save(props) {
 
                             <View style={styles.placeview}>
                                 <Input
-                                    style={{width:'75%'}}
+                                    style={{flex: 1}}
                                     label='Place'
                                     placeholder='Describe the place.'
                                     onChangeText={nextValue => setTPOregioncomments(nextValue)}
                                 />
                                 <Button
-                                    style={{width:'20%', height:"10%",marginTop:22}}
-                                    appearance='outlined'
+                                    style={{height: 1, marginTop: 18.5}}
+                                    appearance='ghost'
                                     accessoryLeft={mapIcon}
                                     onPress={() => {
                                         props.navigation.navigate('Map', {TPO_region})
@@ -215,48 +216,41 @@ export default function Save(props) {
                                 />
                             </View>
                             <View style={styles.occasionview}>
-                                <View style={styles.placeview}>
-                                    <Input
-                                        style={{width:'85%'}}
-                                        label='Occasion'
-                                        placeholder='Tag Occasion.'
-                                        value={occasiontext}
-                                        onChangeText={nextValue => setOccasiontext(nextValue)}
-                                    />
-                                    <Button
-                                        style={{width:'5%', height:"10%",marginTop:22}}
-                                        appearance='outlined'
-                                        accessoryLeft={plusIcon}
-                                        onPress={addOccasion}
-                                    />
-                                </View>
-                                <View style={{flexDirection:'row'}}>
-                                    {TPO_occasion.map(item =>
-                                        (<Chip onClose={() => deleteOccasion(item)}>{`#${item}`}</Chip>)
-                                    )}
-                                </View>
+                                <Input
+                                    style={{flex: 1}}
+                                    label='Occasion'
+                                    placeholder='Tag Occasion.'
+                                    value={occasiontext}
+                                    onChangeText={nextValue => setOccasiontext(nextValue)}
+                                />
+                                <Button
+                                    style={{height: 1, marginTop: 18.5}}
+                                    appearance='ghost'
+                                    accessoryLeft={plusIcon}
+                                    onPress={addOccasion}
+                                />
                             </View>
-                        </ScrollView>
-                    </View>
-
-                    <ProgressBar progress={Progress}/>
-                    <View style={styles.footerview} >
-                        <View style={styles.commentview}>
-                            <TextInput
-                                style={styles.commentstyle}
-                                placeholder="comments..."
-                                onChangeText={(caption) => setCaption(caption)}
-                            />
-
+                            <View style={{flexDirection:'row'}}>
+                                {TPO_occasion.map(item =>
+                                    (<Chip onClose={() => deleteOccasion(item)}>{`#${item}`}</Chip>)
+                                )}
+                            </View>
+                            <View style={styles.commentview} >
+                                <Input
+                                    style={{flex: 1}}
+                                    label='Caption'
+                                    placeholder="comments..."
+                                    onChangeText={(caption) => setCaption(caption)}
+                                />
+                                <Button
+                                    style={{height: 1, marginTop: 18.5}}
+                                    appearance='ghost'
+                                    accessoryLeft={uploadIcon}
+                                    onPress={() => uploadImage()}
+                                />
+                            </View>
                         </View>
-                        <View style={styles.uploadview}>
-                            <Button
-                                appearance='ghost'
-                                accessoryLeft={uploadIcon}
-                                onPress={() => uploadImage()}
-                            />
-                        </View>
-                    </View>
+                    </KeyboardAwareScrollView>
                 </View>
             </ApplicationProvider>
         </>
@@ -266,62 +260,41 @@ export default function Save(props) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        marginTop: 8,
         padding: 10,
         backgroundColor: 'white',
     },
     imageview:{
-        flex: 5,
+        flex: 3,
         marginTop: 20,
-        backgroundColor: 'white',
-    },
-    contents:{
-        flex: 5,
-        marginTop: 5,
+        marginBottom: 10,
         backgroundColor: 'white',
     },
     scrollview:{
         flex: 1,
+        backgroundColor: 'white',
     },
     timeview:{
         flex: 1,
         justifyContent: 'space-between',
         flexDirection: 'row',
+        marginTop: 10,
+        backgroundColor: 'white'
     },
     placeview:{
-        flex: 1,
-        justifyContent: 'space-between',
+        justifyContent: 'center', 
         flexDirection: 'row',
     },
     occasionview:{
-        flex: 1,
-    },
-    footerview:{
-        flex: 1,
+        justifyContent: 'center', 
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop:10,
-        backgroundColor: 'white',
     },
     commentview:{
-        width:"80%",
-        backgroundColor: 'white',
-    },
-    uploadview:{
-        width:"20%",
-        backgroundColor: 'white',
-    },
-    
+        justifyContent: 'center', 
+        flexDirection: 'row',
+    },    
     image:{
         width: '100%',
         height: '100%',
         resizeMode:'contain',
-    },
-    commentstyle:{
-        height: 40
-    },
-    buttonstyle:{
-        margin:2,
-        justifyContent: 'center',
     },
 })

@@ -43,7 +43,7 @@ function Feed(props) {
             .delete()
     }
 
-    const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+    const LeftContent = props => <Avatar.Icon {...props} icon="account" />
 
     if(props.following.length === 0){
         return (

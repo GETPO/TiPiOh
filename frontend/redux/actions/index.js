@@ -35,7 +35,7 @@ export function fetchUserPosts() {
         .collection("posts")                        // 'posts' 컬렉션에 접근하고
         .doc(firebase.auth().currentUser.uid)       // currentUser의 uid를 기반의 doc에서
         .collection("userPosts")                    // userPosts 컬렉션에 접근
-        .orderBy("creation", "asc")                 // 생성된 날짜를 기반으로 오름차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
+        .orderBy("creation", "desc")                // 생성된 날짜를 기반으로 내림차순 정렬 (timestamp는 integer로 구성돼서 정렬이 가능함)
         .get()                                      // 확인한 것을 가지고 옴
         .then((snapshot) => {                       // 확인한 정보를 snapshot(통채로 들고옴)
             let posts = snapshot.docs.map(doc => {  // map은 docs를 iterate(순차적으로 접근)해서 원하는 정보만 뽑아서 배열로 리턴한다.

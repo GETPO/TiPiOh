@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions,Button } from 'react-native';
+import { StyleSheet, View, Dimensions,Button } from 'react-native';
 
 export default function Map(props) {
     const [region, setRegion] = useState([])
