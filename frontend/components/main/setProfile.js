@@ -6,7 +6,7 @@ require('firebase/firestore')
 
 export default function setProfile(props) {
     const [ intro, setIntro ] = useState("");
-    const currentUser = props.route.params.user;
+    const currentUser = props.route.params.searchUser;
 
     const updateIntro = () => {
         firebase.firestore()

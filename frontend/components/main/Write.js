@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native';
 import { Camera } from 'expo-camera';
 import { IconButton, Colors } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';

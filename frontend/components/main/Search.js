@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, FlatList, TouchableOpacity } from 'react-native';
 import { TextInput, Card, Avatar } from 'react-native-paper';
 import firebase from 'firebase';
 require('firebase/firestore')

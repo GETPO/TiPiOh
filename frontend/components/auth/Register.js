@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ReactNative, { View, SafeAreaView, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Headline } from 'react-native-paper'
 import firebase from 'firebase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
