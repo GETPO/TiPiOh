@@ -46,11 +46,40 @@ T.P.O (Time, Place, Occasion) 기반 SNS 애플리케이션<br>
 ```bash
 cd TiPiOh/frontend
 ```
-2. npm 설치
+<br>
+
+2. config 폴더 생성 (/TiPiOh/frontend/config)
+```bash
+mkdir config
+```
+<br>
+
+3. config 폴더 내부에 FirebaseConfig.js, GoogleMapApi.js 생성
+* FirebaseConfig.js
+``` javascript
+module.exports = {
+    apiKey: "[Your Firebase SDK value]",
+    authDomain: "[Your Firebase SDK value]",
+    projectId: "[Your Firebase SDK value]",
+    storageBucket: "[Your Firebase SDK value]",
+    messagingSenderId: "[Your Firebase SDK value]",
+    appId: "[Your Firebase SDK value]",
+    measurementId: "[Your Firebase SDK value]",
+}
+```
+* GoogleMapApi.js
+``` javascript
+module.exports = "[Your Google Map Api Key]"
+```
+<br>
+
+4. npm 설치
 ```bash
 npm install
 ```
-3. expo 실행
+<br>
+
+5. expo 실행
 ```bash
 expo start -c
 ```
@@ -185,5 +214,3 @@ expo start -c
 #
 ## 🔗 &nbsp; Reference
 Source Code reference by [SimCoder](https://github.com/SimCoderYoutube/InstagramClone)
-
-

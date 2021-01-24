@@ -90,10 +90,8 @@ export default function Save(props) {
                 longitudeDelta: 0.009
             }
             if(locationCheck){
-                console.log(nowlocation)
                 setlocationCheck(!locationCheck)
                 setTPOregin(nowlocation)
-                console.log(TPO_region,"mmm")
             }
         })();
             const unsubscribe = props.navigation.addListener('focus', () => {

@@ -27,7 +27,7 @@
       "package": "com.company.TiPiOh",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCU_ZUYZU_8Jx_UkOUxPt60o5i4CfRCodk"
+          "apiKey": "./config/GoogleMapApi.js"
         }
       }
     },
