@@ -6,7 +6,6 @@ export default function Map(props) {
     const [region, setRegion] = useState([])
 
     useEffect(() => {
-        console.log(props)
         setRegion(props.route.params.region)
     }, [props])
 
