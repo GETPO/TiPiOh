@@ -22,7 +22,7 @@ T.P.O (Time, Place, Occasion) 기반 SNS 애플리케이션<br>
 <p align='center'>
     <img src="https://user-images.githubusercontent.com/44153216/105625353-064b2900-5e6c-11eb-80dd-c0d125e04f26.png" width="8.3%"></img>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://user-images.githubusercontent.com/44153216/105625387-48746a80-5e6c-11eb-80e8-acbc8431e86e.png" height="50"></img>
+    <img src="https://user-images.githubusercontent.com/44153216/105625387-48746a80-5e6c-11eb-80e8-acbc8431e86e.png" width="23%"></img>
 </p>
 
 <br>
