@@ -22,6 +22,10 @@ import rootReducer from './redux/reducers'
 import thunk from 'redux-thunk'
 import fbconfig from './config/FirebaseConfig'
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); 
+LogBox.ignoreAllLogs();
+
 const Stack = createStackNavigator();
 const store = createStore(rootReducer,applyMiddleware(thunk))
 
