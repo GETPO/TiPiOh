@@ -42,11 +42,11 @@ T.P.O (Time, Place, Occasion) 기반 SNS 애플리케이션<br>
 
 
 ## ⚙️&nbsp;&nbsp;Installation & build
-1. frontend 폴더로 이동
+1. frontend 디렉토리로 이동
 ```bash
 cd TiPiOh/frontend
 ```
-2. npm 모듈 설치
+2. npm 설치
 ```bash
 npm install
 ```
