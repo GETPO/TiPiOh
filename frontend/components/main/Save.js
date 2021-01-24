@@ -260,6 +260,7 @@ export default function Save(props) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+        marginBottom: 25,
         padding: 10,
         backgroundColor: 'white',
     },
