@@ -3,7 +3,10 @@
 T.P.O (Time, Place, Occasion) 기반 SNS 애플리케이션<br>
 특정 시간, 장소, 상황에서의 나의 패션과 개성을 공유할 수 있는 서비스입니다
 
+<div align='center'>
+
 ![TiPiOh](https://user-images.githubusercontent.com/44153216/105630072-170a9780-5e8a-11eb-9e31-c9045b69f4ef.jpeg)
+</div>
 <br>
 
 <p align='center'>
