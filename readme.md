@@ -38,11 +38,7 @@ T.P.O (Time, Place, Occasion) 기반 SNS 애플리케이션<br>
 |-----|-----|-----|
 |[@yuchanleeme](https://github.com/yuchanleeme)|[@injeChoi](https://github.com/injeChoi)|[@sw.oom_photo](https://www.instagram.com/sw.oom_photo)|
 
-
-Copyright ©️ 2021 &nbsp; [@이유찬](https://github.com/yuchanleeme) [@최인제](https://github.com/injeChoi)
-<br>
-Photograph by &nbsp;[@sw.oom_photo](https://www.instagram.com/sw.oom_photo)
-<br><br><br>
+<br><br>
 
 
 ## ⚙️&nbsp;&nbsp;Installation & build
